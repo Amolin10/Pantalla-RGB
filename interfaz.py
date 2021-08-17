@@ -108,15 +108,26 @@ class Bienvenida:
         fondo.grid_rowconfigure(3,weight=1)
         fondo.grid_rowconfigure(4,weight=1)
 
-        bottonAyuda = Button(fondo, text="Ayuda", command=ayuda2)
-        bottonAyuda.grid(row=4, column=0)
+        imgAyuda=Image.open("./iconos/interrogacion.png")
+        imgAyuda = imgAyuda.resize((20, 20))
+        imgAyuda = ImageTk.PhotoImage(imgAyuda)
+        botonAyuda = Button(fondo, image=imgAyuda, text="Ayuda  ", compound="right", command=ayuda2)
+        botonAyuda.grid(row=4, column=0, ipadx=10)
+        botonAyuda.image = imgAyuda
 
-        #botonImagen = Image.open("firefly.ico")
-        ##botonImagen= botonImagen.resize((20, 20))
-        #botonImagen = ImageTk.PhotoImage("firefly.ico")
+        imgContinuar=Image.open("./iconos/arrow.png")
+        imgContinuar = imgContinuar.resize((20, 20))
+        imgContinuar = ImageTk.PhotoImage(imgContinuar)
+        botonContinuar = Button(fondo, image=imgContinuar, text="Continuar  ", compound="right", command=ventana2)
+        botonContinuar.grid(row=4, column=1)
+        botonContinuar.image = imgContinuar
 
-        boton = Button(fondo, text="Continuar", command=ventana2)
-        boton.grid(row=4, column=2)
+        imgQuit=Image.open("./iconos/quit.jpg")
+        imgQuit = imgQuit.resize((20, 20))
+        imgQuit = ImageTk.PhotoImage(imgQuit)
+        botonSalir = Button(fondo, image=imgQuit, text="Salir  ", compound="right", command=self.cerrar)
+        botonSalir.grid(row=4, column=2, ipadx=10)
+        botonSalir.image = imgQuit
 
 
     def cerrar(self):
