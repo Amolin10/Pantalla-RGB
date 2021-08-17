@@ -30,7 +30,7 @@ def ventana2():
     programa.mostrar()
 
 def informacion():
-    messagebox.showinfo("Información", "Interfaz para configurar tablero RGB.\nCreado por: ......")
+    messagebox.showinfo("Información", "Interfaz para configurar tablero RGB.\n\nCreado por: ......")
     #info.cargar()
     #info.mostrar()
 
