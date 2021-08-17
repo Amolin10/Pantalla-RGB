@@ -1,6 +1,7 @@
 
 from os import cpu_count
 from tkinter import *
+from tkinter import ttk
 import os.path
 from PIL import Image,ImageTk
 from tkinter import messagebox
@@ -55,9 +56,9 @@ class Bienvenida:
         self.root.config(background='white')
 
         if self.resizable:
-            self.root.resizable(1, 1)
-        else:
             self.root.resizable(0, 0)
+        else:
+            self.root.resizable(1, 1)
 
         uama = Image.open("uamazcL.png")
         uama= uama.resize((180, 60))
@@ -182,8 +183,8 @@ class Interfaz:
         self.root.title(self.title)
         icono = os.path.abspath(self.icon)
         self.root.iconbitmap(icono)
-        ancho = 800
-        alto = 600
+        ancho = 1200
+        alto = 650
         xVentana = self.root.winfo_screenwidth() // 2 - ancho // 2 #winfo da el tamaño de la pantalla en ancho y en alto
         yVentana = self.root.winfo_screenheight() // 2 - alto // 2
         posicion = str(ancho) + "x" + str(alto) + "+" + str(xVentana)+ "+" + str(yVentana)
@@ -198,23 +199,26 @@ class Interfaz:
         uama = Image.open("uamazc.jpg")
         uama= uama.resize((180, 80))
         uama = ImageTk.PhotoImage(uama)
-        uamA = Label(self.root, image=uama, width=180, height=80, background='whitesmoke')
+        uamA = Label(self.root, image=uama, width=180, height=80, padx=100, background='whitesmoke')
         uamA.image = uama
         uamA.grid(row=0, column=0, sticky='ewns')
 
         cbi = Image.open("cbi.png")
         cbi= cbi.resize((180, 80))
         cbi = ImageTk.PhotoImage(cbi)
-        CBI = Label(self.root, image=cbi, width=180, height=80, background='whitesmoke')
+        CBI = Label(self.root, image=cbi, width=180, height=80, padx=100, background='whitesmoke')
         CBI.image = cbi
         CBI.grid(row=0, column=2, sticky='ewns')
 
-        titulo = Label(self.root, text="Insertar título", font=("Verdana", 16), background='whitesmoke', padx=100).grid(row=0, column=1, sticky='ewns')
+        titulo = Label(self.root, text="Insertar título", font=("Verdana", 22), background='whitesmoke').grid(row=0, column=1, sticky='ewns')
         
-        Label(self.root, text="Seleccionar una imagen, tipo y tiempo de animación para mostrar en la pantalla RGB.", font=("Verdana", 10), pady=10, background='white').grid(row=1, column=0,columnspan=3)
 
-        Label(self.root, text="Selecciona una imagen", font=("Verdana", 12), background='white').grid(row=2, column=0)
-        Button(self.root, text="Cargar", command=self.selecImagen).grid(row=2, column=1, sticky=W)
+        texto = Label(self.root, text="Seleccionar una imagen, tipo y tiempo de animación para mostrar en la pantalla RGB.", font=("Verdana", 18), pady=30, background='white')
+        texto.grid(row=1, column=0,columnspan=3)
+        
+        ttk.Separator(self.root, orient=HORIZONTAL).grid(row=2, column=0, columnspan=3, sticky="ew")
+        Label(self.root, text="Selecciona una imagen para\nmostrar en la pantalla RGB", font=("Verdana", 12), pady=20, background='white').grid(row=3, column=0)
+        Button(self.root, text="Cargar imagen", height=2, width=20, command=self.selecImagen).grid(row=3, column=1, sticky=W)
 
         self.root.grid_columnconfigure(0,weight=1)
         self.root.grid_columnconfigure(1,weight=1)
@@ -222,10 +226,8 @@ class Interfaz:
         #self.root.grid_rowconfigure(0,weight=1)
         #self.root.grid_rowconfigure(1,weight=1)
         #self.root.grid_rowconfigure(2,weight=1)
-        self.root.grid_rowconfigure(3,weight=1)
+        #self.root.grid_rowconfigure(3,weight=1)
         self.root.grid_rowconfigure(4,weight=1)
-
-
 
     
     def selecImagen(self):
@@ -239,7 +241,7 @@ class Interfaz:
             ImagenEntrada = ImageTk.PhotoImage(imagenEntrada)
             imagenOriginal = Label(self.root, image=ImagenEntrada)
             imagenOriginal.image = ImagenEntrada
-            imagenOriginal.grid(row=3, column=1, sticky=N)
+            imagenOriginal.grid(row=4, column=1, sticky=N)
 
     def cargarMenus(self):
 
