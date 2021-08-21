@@ -31,7 +31,7 @@ def ventana2():
     programa.mostrar()
 
 def informacion():
-    messagebox.showinfo("Información", "Interfaz para configurar tablero RGB.\n\nCreado por: ......")
+    messagebox.showinfo("Información", "Interfaz para configurar tablero RGB.\n\nVersión: ......")
     #info.cargar()
     #info.mostrar()
 
@@ -194,7 +194,7 @@ class Interfaz:
         if self.resizable:
             self.root.resizable(1, 1)
         else:
-            self.root.resizable(0, 0)
+            self.root.resizable(0, 0)           
 
         uama = Image.open("uamazc.jpg")
         uama= uama.resize((180, 80))
@@ -208,21 +208,43 @@ class Interfaz:
         cbi = ImageTk.PhotoImage(cbi)
         CBI = Label(self.root, image=cbi, width=180, height=80, padx=100, background='whitesmoke')
         CBI.image = cbi
-        CBI.grid(row=0, column=2, sticky='ewns')
+        CBI.grid(row=0, column=4, sticky='ewns')
 
-        titulo = Label(self.root, text="Insertar título", font=("Verdana", 22), background='whitesmoke').grid(row=0, column=1, sticky='ewns')
-        
-
+        titulo = Label(self.root, text="Insertar título", font=("Verdana", 22), background='whitesmoke').grid(row=0, column=1, columnspan=3, sticky='ewns')
         texto = Label(self.root, text="Seleccionar una imagen, tipo y tiempo de animación para mostrar en la pantalla RGB.", font=("Verdana", 18), pady=30, background='white')
-        texto.grid(row=1, column=0,columnspan=3)
+        texto.grid(row=1, column=0, columnspan=5)
         
-        ttk.Separator(self.root, orient=HORIZONTAL).grid(row=2, column=0, columnspan=3, sticky="ew")
-        Label(self.root, text="Selecciona una imagen para\nmostrar en la pantalla RGB", font=("Verdana", 12), pady=20, background='white').grid(row=3, column=0)
-        Button(self.root, text="Cargar imagen", height=2, width=20, command=self.selecImagen).grid(row=3, column=1, sticky=W)
+        ttk.Separator(self.root, orient=HORIZONTAL).grid(row=2, column=0, columnspan=5, sticky="ew")
+        ttk.Separator(self.root, orient=VERTICAL).grid(row=3, column=2, rowspan=1, sticky="ns")
+        ttk.Separator(self.root, orient=HORIZONTAL).grid(row=4, column=0, columnspan=5, sticky="ewn")
+
+        parametros = Frame(self.root, background='white')
+        ########Poner una variable a los radiobutons##########################
+        Label(parametros, text="Selecciona el efecto para aplicar a la imagen", font=("Verdana", 12), pady=14, background='white').grid(column=0, row=0, columnspan=3)
+        Radiobutton(parametros, text="Instantaneo", font=("Verdana", 10), background='white').grid(column=0 , row=1,)
+        Radiobutton(parametros, text="De abajo a arriba", font=("Verdana", 10), background='white', padx=20).grid(column=1 , row=1, sticky="ew")
+        Radiobutton(parametros, text="Aleatorio", font=("Verdana", 10), background='white').grid(column=2, row=1, sticky="e")
+        Radiobutton(parametros, text="De derecha a izquierda", font=("Verdana", 10), background='white').grid(column=0, row=2, sticky="e")
+        Radiobutton(parametros, text="De arriba a abajo", font=("Verdana", 10), background='white').grid(column=2, row=2, sticky="w")
+
+        Label(parametros, text="", background="white").grid(column=0, row=3, columnspan=3)
+
+        Label(parametros, text="Elija el tiempo: ", font=("Verdana", 12), pady=14, background='white', padx=10).grid(column=0, row=4, sticky="e")
+        tiempo = Entry(parametros)
+        tiempo.grid(column=1, row=4, sticky="w")
+        parametros.grid(column=0, row=3, columnspan=2, sticky='n')
+
+
+        imagenFrame = Frame(self.root, background='white', pady=10)
+        Label(imagenFrame, text="Selecciona una imagen para\nmostrar en la pantalla RGB", font=("Verdana", 12), padx=10, pady=20, background='white').grid(row=0, column=0)
+        Button(imagenFrame, text="Cargar imagen", height=2, width=20, command=lambda:self.selecImagen(imagenFrame)).grid(row=0, column=1)
+        imagenFrame.grid(row=3, column=3, columnspan=2, sticky="n")
 
         self.root.grid_columnconfigure(0,weight=1)
         self.root.grid_columnconfigure(1,weight=1)
-        self.root.grid_columnconfigure(2,weight=1)
+        #self.root.grid_columnconfigure(2,weight=1)
+        self.root.grid_columnconfigure(3,weight=1)
+        self.root.grid_columnconfigure(4,weight=1)
         #self.root.grid_rowconfigure(0,weight=1)
         #self.root.grid_rowconfigure(1,weight=1)
         #self.root.grid_rowconfigure(2,weight=1)
@@ -230,7 +252,7 @@ class Interfaz:
         self.root.grid_rowconfigure(4,weight=1)
 
     
-    def selecImagen(self):
+    def selecImagen(self, imagenFrame):
         archivo = filedialog.askopenfilename(filetypes=[('Archivos de imagen', '*.jpg')])
 
         if archivo is not None:
@@ -239,9 +261,9 @@ class Interfaz:
             ancho, alto = imagenEntrada.size
             imagenEntrada = imagenEntrada.resize((360, 140))
             ImagenEntrada = ImageTk.PhotoImage(imagenEntrada)
-            imagenOriginal = Label(self.root, image=ImagenEntrada)
+            imagenOriginal = Label(imagenFrame, image=ImagenEntrada)
             imagenOriginal.image = ImagenEntrada
-            imagenOriginal.grid(row=4, column=1, sticky=N)
+            imagenOriginal.grid(column=0, row=1, columnspan=2, sticky=N)
 
     def cargarMenus(self):
 
@@ -259,6 +281,7 @@ class Interfaz:
         miMenu.add_cascade(label="Archivo", menu=archivo)
         miMenu.add_command(label="Ayuda", command=ayuda3)
         miMenu.add_command(label="Información", command=informacion)
+
 
     def destruir(self):
         self.root.destroy()
