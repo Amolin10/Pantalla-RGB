@@ -9,13 +9,6 @@ from tkinter import filedialog
 from ayuda import *
 from principal import *
 
-
-def ventanaPrincipal():
-    bienvenida.cerrar()
-    programa.cargar()
-    programa.cargarMenus()
-    programa.mostrar()
-
 class Bienvenida:
 
     def __init__(self):
@@ -44,14 +37,14 @@ class Bienvenida:
         uama = Image.open("./recursos/uamazcL.png")
         uama= uama.resize((180, 60))
         uama = ImageTk.PhotoImage(uama)
-        uamA = Label(self.root, image=uama, width=180, height=80, background='white')
+        uamA = Label(self.root, image=uama, width=180, height=60, background='white')
         uamA.image = uama
         uamA.grid(row=0, column=0, sticky=W+S+N+E)
 
         cbi = Image.open("./recursos/cbi.png")
-        cbi= cbi.resize((160, 60))
+        cbi= cbi.resize((180, 60))
         cbi = ImageTk.PhotoImage(cbi)
-        CBI = Label(self.root, image=cbi, width=160, height=80, background='white')
+        CBI = Label(self.root, image=cbi, width=180, height=60, background='white')
         CBI.image = cbi
         CBI.grid(row=0, column=2,sticky=W+S+N+E)
 
@@ -97,7 +90,7 @@ class Bienvenida:
         imgContinuar=Image.open("./iconos/arrow.png")
         imgContinuar = imgContinuar.resize((20, 20))
         imgContinuar = ImageTk.PhotoImage(imgContinuar)
-        botonContinuar = Button(fondo, image=imgContinuar, text="Continuar  ", compound="right", command=ventanaPrincipal)
+        botonContinuar = Button(fondo, image=imgContinuar, text="Continuar  ", compound="right", command=self.ventanaPrincipal)
         botonContinuar.grid(row=4, column=1)
         botonContinuar.image = imgContinuar
 
@@ -108,12 +101,20 @@ class Bienvenida:
         botonSalir.grid(row=4, column=2, ipadx=10)
         botonSalir.image = imgQuit
 
+    def informacion(self):
+        messagebox.showinfo("Información", "Interfaz para configurar tablero RGB.\n\nVersión: ......")
 
     def cerrar(self):
         self.root.destroy()
 
     def mostrar(self):
         self.root.mainloop()
+
+    def ventanaPrincipal(self):
+        self.cerrar()
+        programa.cargar()
+        programa.cargarMenus()
+        programa.mostrar()
 
 
 bienvenida = Bienvenida()
