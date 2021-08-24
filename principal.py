@@ -7,7 +7,6 @@ from tkinter import messagebox
 from tkinter import filedialog
 from ayuda import *
 
-
 def informacion():
     messagebox.showinfo("Información", "Interfaz para configurar tablero RGB.\n\nVersión: ......")
 
@@ -15,7 +14,7 @@ class Interfaz:
 
     def __init__(self):
         self.title = "Letrero RGB"
-        self.icon = "firefly.ico"
+        self.icon = "./iconos/firefly.ico"
         self.resizable = True
         self.root = "Tk()"
 
@@ -37,14 +36,14 @@ class Interfaz:
         else:
             self.root.resizable(0, 0)           
 
-        uama = Image.open("uamazc.jpg")
+        uama = Image.open("./recursos/uamazc.jpg")
         uama= uama.resize((180, 80))
         uama = ImageTk.PhotoImage(uama)
         uamA = Label(self.root, image=uama, width=180, height=80, padx=100, background='whitesmoke')
         uamA.image = uama
         uamA.grid(row=0, column=0, sticky='ewns')
 
-        cbi = Image.open("cbi.png")
+        cbi = Image.open("./recursos/cbi.png")
         cbi= cbi.resize((180, 80))
         cbi = ImageTk.PhotoImage(cbi)
         CBI = Label(self.root, image=cbi, width=180, height=80, padx=100, background='whitesmoke')

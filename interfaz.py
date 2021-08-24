@@ -20,7 +20,7 @@ class Bienvenida:
 
     def __init__(self):
         self.title = "Letrero RGB Inicio"
-        self.icon = "firefly.ico"
+        self.icon = "./iconos/firefly.ico"
         self.resizable = True
         self.root = Tk()
 
@@ -41,14 +41,14 @@ class Bienvenida:
         else:
             self.root.resizable(1, 1)
 
-        uama = Image.open("uamazcL.png")
+        uama = Image.open("./recursos/uamazcL.png")
         uama= uama.resize((180, 60))
         uama = ImageTk.PhotoImage(uama)
         uamA = Label(self.root, image=uama, width=180, height=80, background='white')
         uamA.image = uama
         uamA.grid(row=0, column=0, sticky=W+S+N+E)
 
-        cbi = Image.open("cbi.png")
+        cbi = Image.open("./recursos/cbi.png")
         cbi= cbi.resize((160, 60))
         cbi = ImageTk.PhotoImage(cbi)
         CBI = Label(self.root, image=cbi, width=160, height=80, background='white')
@@ -68,7 +68,7 @@ class Bienvenida:
         fondo.grid_propagate(False) #El frame no se ajusta al contenido
         fondo.grid(row=1, column=0, columnspan=3, sticky=W+S+N+E)
 
-        rgbImagen = Image.open("micro.jpg")
+        rgbImagen = Image.open("./recursos/micro.jpg")
         #rgbImagen= rgbImagen.resize((800, 800))
         rgbImagen = ImageTk.PhotoImage(rgbImagen)
         fondoRGB = Label(fondo, image=rgbImagen, background='white')

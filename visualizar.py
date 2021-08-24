@@ -20,16 +20,16 @@ lightblue = (173,216,230)
 
 #Imagen de ventana y título
 pygame.display.set_caption("Visualizar")
-icono = pygame.image.load("firefly.png")
+icono = pygame.image.load("./recursos/firefly.png")
 pygame.display.set_icon(icono)
 
 
-uam = pygame.image.load("./uamazcL.png")
+uam = pygame.image.load("./recursos/uamazcL.png")
 uamAzc = pygame.transform.scale(uam, (300, 80))
-cbi = pygame.image.load("./cbi.png")
+cbi = pygame.image.load("./recursos/cbi.png")
 cbiAzc = pygame.transform.scale(cbi, (300, 80))
 
-prueba = pygame.image.load("RGB.jpg")
+prueba = pygame.image.load("./recursos/RGB.jpg")
 pruebaR = pygame.transform.scale(prueba, (360, 140))
 
 miFuente = pygame.font.SysFont("Verdana", 30)

@@ -18,7 +18,7 @@ class Ayuda:
 
     def __init__(self):
         self.title = "Letrero RGB Ayuda"
-        self.icon = "firefly.ico"
+        self.icon = "./iconos/firefly.ico"
         self.resizable = True
 
     def cargar(self):
@@ -48,3 +48,5 @@ class Ayuda:
         self.root.mainloop()
 
 ayuda = Ayuda()
+#ayuda.cargar()
+#ayuda.mostrar()
