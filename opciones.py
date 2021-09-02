@@ -20,7 +20,7 @@ class Opciones:
         self.root.title(self.title)
         icono = os.path.abspath(self.icon)
         self.root.iconbitmap(icono)
-        ancho = 720
+        ancho = 770
         alto = 300
         xVentana = self.root.winfo_screenwidth() // 2 - ancho // 2 #winfo da el tamaño de la pantalla en ancho y en alto
         yVentana = self.root.winfo_screenheight() // 2 - alto // 2
@@ -37,21 +37,21 @@ class Opciones:
         imgNuevo=Image.open("./iconos/nuevo.jpg")
         imgNuevo = imgNuevo.resize((40, 40))
         imgNuevo = ImageTk.PhotoImage(imgNuevo)
-        botonNuevo = Button(self.root, image=imgNuevo, text="Nuevo  ", compound="right", font=("Verdana", 14), background='white', activebackground="#999999" , command=self.ventanaPrincipal)
-        botonNuevo.grid(row=0, column=0, ipadx=104, padx=15, sticky="ws")
+        botonNuevo = Button(self.root, image=imgNuevo, text="Nuevo  ", compound="right", width=350, font=("Verdana", 14), background='white', activebackground="#999999" , command=self.ventanaPrincipal)
+        botonNuevo.grid(row=0, column=0,  padx=15, sticky="ws")
         botonNuevo.image = imgNuevo
 
         imgConfig=Image.open("./iconos/engrane.png")
         imgConfig = imgConfig.resize((40, 40))
         imgConfig = ImageTk.PhotoImage(imgConfig)
-        botonConfig = Button(self.root, image=imgConfig, text="Cargar configuración  ", compound="right", background='white', activebackground="#999999", font=("Verdana", 14), command=self.ventanaPrincipal)
-        botonConfig.grid(row=1, column=0, ipadx=34, padx=50, sticky="w")
+        botonConfig = Button(self.root, image=imgConfig, text="Cargar configuración  ", width=350, compound="right", background='white', activebackground="#999999", font=("Verdana", 14))
+        botonConfig.grid(row=1, column=0, padx=50, sticky="w")
         botonConfig.image = imgConfig
 
         imgUSB=Image.open('./iconos/usb.jpg')
         imgUSB = imgUSB.resize((40, 40))
         imgUSB = ImageTk.PhotoImage(imgUSB)
-        botonUSB = Button(self.root, image=imgUSB, text="Cargar desde un dispositivo  ", compound="right", background="white", activebackground="#999999", font=("Verdana", 14), command=self.cerrar)
+        botonUSB = Button(self.root, image=imgUSB, text="Cargar desde un dispositivo  ", width=350, compound="right", background="white", activebackground="#999999", font=("Verdana", 14))
         botonUSB.grid(row=2, column=0, padx=80, sticky="wn")
         botonUSB.image = imgUSB
 
