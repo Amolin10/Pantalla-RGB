@@ -7,7 +7,7 @@ from PIL import Image,ImageTk
 from tkinter import messagebox
 from tkinter import filedialog
 from ayuda import *
-from principal import *
+from opciones import Opciones
 
 class Bienvenida:
 
@@ -21,7 +21,7 @@ class Bienvenida:
         self.root.title(self.title)
         icono = os.path.abspath(self.icon)
         self.root.iconbitmap(icono)
-        ancho = 600
+        ancho = 620
         alto = 400
         xVentana = self.root.winfo_screenwidth() // 2 - ancho // 2 #winfo da el tamaño de la pantalla en ancho y en alto
         yVentana = self.root.winfo_screenheight() // 2 - alto // 2
@@ -48,7 +48,7 @@ class Bienvenida:
         CBI.image = cbi
         CBI.grid(row=0, column=2,sticky=W+S+N+E)
 
-        titulo = Label(self.root, text="Insertar título", padx=60, font=("Verdana", 16), background='white').grid(row=0, column=1)
+        titulo = Label(self.root, text="Insertar título", padx=55, font=("Verdana", 16), background='white').grid(row=0, column=1)
 
         self.root.grid_columnconfigure(0,weight=1)
         self.root.grid_columnconfigure(1,weight=1)
@@ -90,7 +90,7 @@ class Bienvenida:
         imgContinuar=Image.open("./iconos/arrow.png")
         imgContinuar = imgContinuar.resize((20, 20))
         imgContinuar = ImageTk.PhotoImage(imgContinuar)
-        botonContinuar = Button(fondo, image=imgContinuar, text="Continuar  ", compound="right", command=self.ventanaPrincipal)
+        botonContinuar = Button(fondo, image=imgContinuar, text="Continuar  ", compound="right", command=self.continuarOpciones)
         botonContinuar.grid(row=4, column=1)
         botonContinuar.image = imgContinuar
 
@@ -101,23 +101,19 @@ class Bienvenida:
         botonSalir.grid(row=4, column=2, ipadx=10)
         botonSalir.image = imgQuit
 
-    def informacion(self):
-        messagebox.showinfo("Información", "Interfaz para configurar tablero RGB.\n\nVersión: ......")
-
     def cerrar(self):
         self.root.destroy()
 
     def mostrar(self):
         self.root.mainloop()
 
-    def ventanaPrincipal(self):
+    def continuarOpciones(self):
         self.cerrar()
-        programa.cargar()
-        programa.cargarMenus()
-        programa.mostrar()
+        opciones = Opciones()
+        opciones.cargar()
+        opciones.mostrar()
 
 
 bienvenida = Bienvenida()
-
 bienvenida.cargar()
 bienvenida.mostrar()
