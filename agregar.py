@@ -1,5 +1,5 @@
 from os import cpu_count
-from principal import Interfaz
+from principal import *
 from tkinter import *
 from tkinter import ttk
 import os.path
@@ -8,6 +8,7 @@ from tkinter import messagebox
 from tkinter import filedialog
 from ayuda import *
 from visualizar import mostrar
+from resumen import Resumen
 
 class Agregar:
 
@@ -52,7 +53,7 @@ class Agregar:
         imgTerminar=Image.open('./iconos/arrow.png')
         imgTerminar = imgTerminar.resize((40, 40))
         imgTerminar = ImageTk.PhotoImage(imgTerminar)
-        botonTerminar = Button(self.root, image=imgTerminar, text="Terminado  ", compound="right", width=300, background="white", activebackground="#999999", font=("Verdana", 14), command=self.cerrar)
+        botonTerminar = Button(self.root, image=imgTerminar, text="Terminado  ", compound="right", width=300, background="white", activebackground="#999999", font=("Verdana", 14), command=self.resumen)
         botonTerminar.grid(row=2, column=0, padx=80, sticky="wn")
         botonTerminar.image = imgTerminar
 
@@ -86,9 +87,15 @@ class Agregar:
         programa.cargarMenus()
         programa.mostrar()
 
-agregar = Agregar()
-agregar.cargar()
-agregar.mostrar()
+    def resumen(self):
+        self.cerrar()
+        resumen = Resumen()
+        resumen.cargar()
+        resumen.mostrar()
+
+#agregar = Agregar()
+#agregar.cargar()
+#agregar.mostrar()
 
 
 #lista = [0, 1, 2, 3, 4]

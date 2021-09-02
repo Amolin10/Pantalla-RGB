@@ -6,6 +6,7 @@ from PIL import Image,ImageTk
 from tkinter import messagebox
 from tkinter import filedialog
 from ayuda import *
+from agregar import Agregar
 
 
 class Interfaz:
@@ -117,7 +118,7 @@ class Interfaz:
         imgContinuar = Image.open("./iconos/arrow.png")
         imgContinuar = imgContinuar.resize((30, 30))
         imgContinuar = ImageTk.PhotoImage(imgContinuar)
-        botonContinuar = Button(self.root, text="Continuar  ", image=imgContinuar, compound="right", font=("verdana", 14))
+        botonContinuar = Button(self.root, text="Continuar  ", image=imgContinuar, compound="right", font=("verdana", 14), command=self.continuar)
         botonContinuar.grid(column=4, row=11, pady=15, sticky='n')
         botonContinuar.image = imgContinuar
         
@@ -176,6 +177,12 @@ class Interfaz:
 
     def mostrar(self):
         self.root.mainloop()
+    
+    def continuar(self):
+        self.destruir()
+        agregar = Agregar()
+        agregar.cargar()
+        agregar.mostrar()
 
 
 #programa = Interfaz()
