@@ -1,5 +1,4 @@
 from os import cpu_count
-from principal import *
 from tkinter import *
 from tkinter import ttk
 import os.path
@@ -7,8 +6,9 @@ from PIL import Image,ImageTk
 from tkinter import messagebox
 from tkinter import filedialog
 from ayuda import *
-from visualizar import mostrar
-from resumen import Resumen
+#from principal import Interfaz
+from visualizar import * 
+from resumen import *
 
 class Agregar:
 
@@ -80,18 +80,19 @@ class Agregar:
         self.root.destroy()
         mostrar()
 
-    def ventanaPrincipal(self):
-        self.cerrar()
-        programa = Interfaz()
-        programa.cargar()
-        programa.cargarMenus()
-        programa.mostrar()
-
     def resumen(self):
         self.cerrar()
         resumen = Resumen()
         resumen.cargar()
         resumen.mostrar()
+
+    def ventanaPrincipal(self):
+        from principal import Interfaz
+        self.cerrar()
+        programa = Interfaz()
+        programa.cargar()
+        programa.cargarMenus()
+        programa.mostrar()
 
 #agregar = Agregar()
 #agregar.cargar()

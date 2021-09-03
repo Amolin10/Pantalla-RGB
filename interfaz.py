@@ -7,7 +7,7 @@ from PIL import Image,ImageTk
 from tkinter import messagebox
 from tkinter import filedialog
 from ayuda import *
-from opciones import Opciones
+from opciones import *
 
 class Bienvenida:
 
@@ -25,7 +25,7 @@ class Bienvenida:
         alto = 400
         xVentana = self.root.winfo_screenwidth() // 2 - ancho // 2 #winfo da el tamaño de la pantalla en ancho y en alto
         yVentana = self.root.winfo_screenheight() // 2 - alto // 2
-        posicion = str(ancho) + "x" + str(alto) + "+" + str(xVentana)+ "+" + str(yVentana)
+        posicion = str(ancho) + "x" + str(alto) + "+" + str(xVentana) + "+" + str(yVentana)
         self.root.geometry(posicion)
         self.root.config(background='white')
 
@@ -100,7 +100,7 @@ class Bienvenida:
         botonSalir = Button(fondo, image=imgQuit, text="Salir  ", compound="right", command=self.cerrar)
         botonSalir.grid(row=4, column=2, ipadx=10)
         botonSalir.image = imgQuit
-
+ 
     def cerrar(self):
         self.root.destroy()
 

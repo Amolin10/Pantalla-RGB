@@ -1,5 +1,5 @@
 from os import cpu_count
-from principal import Interfaz
+from principal import *
 from tkinter import *
 from tkinter import ttk
 import os.path

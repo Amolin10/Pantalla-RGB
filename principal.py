@@ -6,7 +6,7 @@ from PIL import Image,ImageTk
 from tkinter import messagebox
 from tkinter import filedialog
 from ayuda import *
-from agregar import Agregar
+#from agregar import Agregar
 
 
 class Interfaz:
@@ -22,8 +22,8 @@ class Interfaz:
         self.root.title(self.title)
         icono = os.path.abspath(self.icon)
         self.root.iconbitmap(icono)
-        ancho = 1400
-        alto = 650
+        ancho = 1450
+        alto = 830
         xVentana = self.root.winfo_screenwidth() // 2 - ancho // 2 #winfo da el tamaño de la pantalla en ancho y en alto
         yVentana = self.root.winfo_screenheight() // 2 - alto // 2
         posicion = str(ancho) + "x" + str(alto) + "+" + str(xVentana)+ "+" + str(yVentana)
@@ -36,23 +36,23 @@ class Interfaz:
             self.root.resizable(0, 0)           
 
         uama = Image.open("./recursos/uamazc.jpg")
-        uama= uama.resize((260, 100))
+        uama= uama.resize((280, 110))
         uama = ImageTk.PhotoImage(uama)
-        uamA = Label(self.root, image=uama, width=260, height=100, padx=100, background='white')
+        uamA = Label(self.root, image=uama, width=260, height=80, padx=100, background='white')
         uamA.image = uama
         uamA.grid(row=0, column=0, sticky='ewns')
 
         electronica = Image.open("./recursos/electronica.jpg")
-        electronica= electronica.resize((220, 100))
+        electronica= electronica.resize((240, 120))
         electronica = ImageTk.PhotoImage(electronica)
-        electronicaLabel = Label(self.root, image=electronica, width=220, height=100, padx=100, background='white')
+        electronicaLabel = Label(self.root, image=electronica, width=220, height=80, padx=100, background='white')
         electronicaLabel.image = electronica
         electronicaLabel.grid(row=0, column=1, columnspan=3, sticky='ewns')
 
         cbi = Image.open("./recursos/cbi.png")
-        cbi= cbi.resize((220, 100))
+        cbi= cbi.resize((240, 120))
         cbi = ImageTk.PhotoImage(cbi)
-        CBI = Label(self.root, image=cbi, width=220, height=100, padx=100, background='white')
+        CBI = Label(self.root, image=cbi, width=220, height=80, padx=100, background='white')
         CBI.image = cbi
         CBI.grid(row=0, column=4, sticky='ewns')
 
@@ -75,6 +75,9 @@ class Interfaz:
         botonCargar = Button(imagenFrame, text="Cargar imagen   ", image=imgImagen, compound="right", font=("verdana", 14), command=lambda:self.selecImagen(imagenFrame))
         botonCargar.grid(row=1, column=0, pady=30)
         botonCargar.image = imgImagen
+
+        Label(imagenFrame, height=16, width=100, background='#E2EFFF').grid(column=0, row=2, sticky=N)
+
         imagenFrame.grid_columnconfigure(0,weight=1)
         #imagenFrame.rowconfigure(0, weight=1)
         imagenFrame.rowconfigure(1, weight=1)
@@ -103,10 +106,10 @@ class Interfaz:
         tiempo = Frame(self.root, background='#E2EFFF')
         Label(tiempo, text="Elija el tiempo de permanencia de la imagen", font=("Verdana", 18), pady=14, background='#E2EFFF').grid(column=0, row=0, columnspan=2)
         Label(tiempo, text="minutos:", font=("verdana", 14), background='#E2EFFF').grid(column=0, row=1, sticky="w")
-        minutosEntry = Entry(tiempo)
+        minutosEntry = Entry(tiempo, font=("verdana", 14))
         minutosEntry.grid(column=0, row=2, sticky='wn', pady=5)
         Label(tiempo, text="segundos:", font=("verdana", 14), background='#E2EFFF').grid(column=1, row=1, sticky="w")
-        segundosEntry = Entry(tiempo)
+        segundosEntry = Entry(tiempo, font=("verdana", 14))
         segundosEntry.grid(column=1, row=2, sticky='wn', pady=5)
         #Label(tiempo, text="", background="white").grid(column=0, row=3, columnspan=3)
         tiempo.grid(row=8, column=3, columnspan=2, rowspan=2, sticky="ns")
@@ -179,14 +182,15 @@ class Interfaz:
         self.root.mainloop()
     
     def continuar(self):
+        from agregar import Agregar
         self.destruir()
         agregar = Agregar()
         agregar.cargar()
         agregar.mostrar()
 
 
-#programa = Interfaz()
-#programa.cargar()
-#programa.cargarMenus()
-#programa.mostrar()
+programa = Interfaz()
+programa.cargar()
+programa.cargarMenus()
+programa.mostrar()
 
