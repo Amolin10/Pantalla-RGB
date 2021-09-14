@@ -16,6 +16,7 @@ class Interfaz:
         self.icon = "./iconos/firefly.ico"
         self.resizable = True
         self.root = "Tk()"
+        self.colorFondo = '#E4E2FF'
 
     def cargar(self):
         self.root = Tk()
@@ -28,7 +29,7 @@ class Interfaz:
         yVentana = self.root.winfo_screenheight() // 2 - alto // 2
         posicion = str(ancho) + "x" + str(alto) + "+" + str(xVentana)+ "+" + str(yVentana)
         self.root.geometry(posicion)
-        self.root.config(background='#E2EFFF')
+        self.root.config(background=self.colorFondo)
 
         if self.resizable:
             self.root.resizable(1, 1)
@@ -59,7 +60,7 @@ class Interfaz:
         titulo = Label(self.root, text="Insertar título", font=("Verdana", 28), relief="groove", background='#184B6C', fg='white').grid(row=1, column=0, columnspan=5, sticky='ewns')
         texto = Label(self.root, text="Seleccionar una imagen, tipo y tiempo de animación para mostrar en la pantalla RGB.", relief='groove',font=("Verdana", 22), background='#2980B9')
         texto.grid(row=2, column=0, columnspan=5, sticky="ewns")
-        Label(self.root, text="", background='#E2EFFF').grid(row=3, column=0, columnspan=5, pady=5)
+        Label(self.root, text="", background=self.colorFondo).grid(row=3, column=0, columnspan=5, pady=5)
         
         ttk.Separator(self.root, orient=HORIZONTAL).grid(row=4, column=0, columnspan=5, sticky="ews")
         ttk.Separator(self.root, orient=VERTICAL).grid(row=5, column=2, rowspan=5, sticky="ns")
@@ -67,8 +68,8 @@ class Interfaz:
         ttk.Separator(self.root, orient=HORIZONTAL).grid(row=10, column=0, columnspan=5, sticky="ewn")
 
 
-        imagenFrame = Frame(self.root, background='#E2EFFF', pady=10)
-        Label(imagenFrame, text="Selecciona una imagen para\nmostrar en la pantalla RGB", font=("verdana", 18), padx=10, background='#E2EFFF').grid(row=0, column=0, sticky="n")
+        imagenFrame = Frame(self.root, background=self.colorFondo, pady=10)
+        Label(imagenFrame, text="Selecciona una imagen para\nmostrar en la pantalla RGB", font=("verdana", 18), padx=10, background=self.colorFondo).grid(row=0, column=0, sticky="n")
         imgImagen = Image.open("./iconos/imagen.png")
         imgImagen = imgImagen.resize((30, 30))
         imgImagen = ImageTk.PhotoImage(imgImagen)
@@ -76,7 +77,7 @@ class Interfaz:
         botonCargar.grid(row=1, column=0, pady=30)
         botonCargar.image = imgImagen
 
-        Label(imagenFrame, height=16, width=100, background='#E2EFFF').grid(column=0, row=2, sticky=N)
+        Label(imagenFrame, height=16, width=100, background=self.colorFondo).grid(column=0, row=2, sticky=N)
 
         imagenFrame.grid_columnconfigure(0,weight=1)
         #imagenFrame.rowconfigure(0, weight=1)
@@ -86,14 +87,14 @@ class Interfaz:
 
 
 
-        parametros = Frame(self.root, background='#E2EFFF')
+        parametros = Frame(self.root, background=self.colorFondo)
         ########Poner una variable a los radiobutons##########################
-        Label(parametros, text="Selecciona el efecto para aplicar a la imagen", font=("Verdana", 18), background='#E2EFFF').grid(column=0, row=0, columnspan=3)
-        Radiobutton(parametros, text="Instantaneo", font=("verdana", 14), background='#E2EFFF').grid(column=0 , row=1,)
-        Radiobutton(parametros, text="De abajo a arriba", font=("verdana", 14), background='#E2EFFF', padx=20).grid(column=1 , row=1, sticky="ew")
-        Radiobutton(parametros, text="Aleatorio", font=("verdana", 14), background='#E2EFFF').grid(column=2, row=1, sticky="e")
-        Radiobutton(parametros, text="De derecha a izquierda", font=("verdana", 14), background='#E2EFFF').grid(column=0, row=2, sticky="e")
-        Radiobutton(parametros, text="De arriba a abajo", font=("verdana", 14), background='#E2EFFF').grid(column=2, row=2, sticky="w")
+        Label(parametros, text="Selecciona el efecto para aplicar a la imagen", font=("Verdana", 18), background=self.colorFondo).grid(column=0, row=0, columnspan=3)
+        Radiobutton(parametros, text="Instantaneo", font=("verdana", 14), background=self.colorFondo).grid(column=0 , row=1,)
+        Radiobutton(parametros, text="De abajo a arriba", font=("verdana", 14), background=self.colorFondo, padx=20).grid(column=1 , row=1, sticky="ew")
+        Radiobutton(parametros, text="Aleatorio", font=("verdana", 14), background=self.colorFondo).grid(column=2, row=1, sticky="e")
+        Radiobutton(parametros, text="De derecha a izquierda", font=("verdana", 14), background=self.colorFondo).grid(column=0, row=2, sticky="e")
+        Radiobutton(parametros, text="De arriba a abajo", font=("verdana", 14), background=self.colorFondo).grid(column=2, row=2, sticky="w")
         Label(parametros, text="", background="#E2EFFF").grid(column=0, row=3, columnspan=3)
         parametros.rowconfigure(0, weight=1)
         parametros.rowconfigure(1, weight=1)
@@ -103,12 +104,12 @@ class Interfaz:
         
         
 
-        tiempo = Frame(self.root, background='#E2EFFF')
-        Label(tiempo, text="Elija el tiempo de permanencia de la imagen", font=("Verdana", 18), pady=14, background='#E2EFFF').grid(column=0, row=0, columnspan=2)
-        Label(tiempo, text="minutos:", font=("verdana", 14), background='#E2EFFF').grid(column=0, row=1, sticky="w")
+        tiempo = Frame(self.root, background=self.colorFondo)
+        Label(tiempo, text="Elija el tiempo de permanencia de la imagen", font=("Verdana", 18), pady=14, background=self.colorFondo).grid(column=0, row=0, columnspan=2)
+        Label(tiempo, text="minutos:", font=("verdana", 14), background=self.colorFondo).grid(column=0, row=1, sticky="w")
         minutosEntry = Entry(tiempo, font=("verdana", 14))
         minutosEntry.grid(column=0, row=2, sticky='wn', pady=5)
-        Label(tiempo, text="segundos:", font=("verdana", 14), background='#E2EFFF').grid(column=1, row=1, sticky="w")
+        Label(tiempo, text="segundos:", font=("verdana", 14), background=self.colorFondo).grid(column=1, row=1, sticky="w")
         segundosEntry = Entry(tiempo, font=("verdana", 14))
         segundosEntry.grid(column=1, row=2, sticky='wn', pady=5)
         #Label(tiempo, text="", background="white").grid(column=0, row=3, columnspan=3)
@@ -172,7 +173,7 @@ class Interfaz:
         miMenu.add_command(label="Ayuda", command=ventanaAyuda)
         miMenu.add_command(label="Información", command=self.informacion)  
 
-    def informacion():
+    def informacion(self):
         messagebox.showinfo("Información", "Interfaz para configurar tablero RGB.\n\nVersión: ......")       
     
     def destruir(self):
@@ -189,8 +190,8 @@ class Interfaz:
         agregar.mostrar()
 
 
-programa = Interfaz()
-programa.cargar()
-programa.cargarMenus()
-programa.mostrar()
+#programa = Interfaz()
+#programa.cargar()
+#programa.cargarMenus()
+#programa.mostrar()
 
