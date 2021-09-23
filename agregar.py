@@ -1,3 +1,6 @@
+##Esta clase ya no se utilizará
+
+
 from os import cpu_count
 from tkinter import *
 from tkinter import ttk

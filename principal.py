@@ -6,6 +6,7 @@ from PIL import Image,ImageTk
 from tkinter import messagebox
 from tkinter import filedialog
 from ayuda import *
+from resumen import *
 #from agregar import Agregar
 
 
@@ -16,7 +17,7 @@ class Interfaz:
         self.icon = "./iconos/firefly.ico"
         self.resizable = True
         self.root = "Tk()"
-        self.colorFondo = '#E4E2FF'
+        self.colorFondo = '#E2EFFF'
 
     def cargar(self):
         self.root = Tk()
@@ -58,7 +59,7 @@ class Interfaz:
         CBI.grid(row=0, column=4, sticky='ewns')
 
         titulo = Label(self.root, text="Insertar título", font=("Verdana", 28), relief="groove", background='#184B6C', fg='white').grid(row=1, column=0, columnspan=5, sticky='ewns')
-        texto = Label(self.root, text="Seleccionar una imagen, tipo y tiempo de animación para mostrar en la pantalla RGB.", relief='groove',font=("Verdana", 22), background='#2980B9')
+        texto = Label(self.root, text="Configurar imagen para mostrar en la pantalla RGB", relief='groove',font=("Verdana", 22), background='#2980B9')
         texto.grid(row=2, column=0, columnspan=5, sticky="ewns")
         Label(self.root, text="", background=self.colorFondo).grid(row=3, column=0, columnspan=5, pady=5)
         
@@ -89,13 +90,13 @@ class Interfaz:
 
         parametros = Frame(self.root, background=self.colorFondo)
         ########Poner una variable a los radiobutons##########################
-        Label(parametros, text="Selecciona el efecto para aplicar a la imagen", font=("Verdana", 18), background=self.colorFondo).grid(column=0, row=0, columnspan=3)
+        Label(parametros, text="Selecciona el efecto de entrada de la imagen", font=("Verdana", 18), background=self.colorFondo).grid(column=0, row=0, columnspan=3)
         Radiobutton(parametros, text="Instantaneo", font=("verdana", 14), background=self.colorFondo).grid(column=0 , row=1,)
         Radiobutton(parametros, text="De abajo a arriba", font=("verdana", 14), background=self.colorFondo, padx=20).grid(column=1 , row=1, sticky="ew")
         Radiobutton(parametros, text="Aleatorio", font=("verdana", 14), background=self.colorFondo).grid(column=2, row=1, sticky="e")
         Radiobutton(parametros, text="De derecha a izquierda", font=("verdana", 14), background=self.colorFondo).grid(column=0, row=2, sticky="e")
         Radiobutton(parametros, text="De arriba a abajo", font=("verdana", 14), background=self.colorFondo).grid(column=2, row=2, sticky="w")
-        Label(parametros, text="", background="#E2EFFF").grid(column=0, row=3, columnspan=3)
+        Label(parametros, text="", background=self.colorFondo).grid(column=0, row=3, columnspan=3)
         parametros.rowconfigure(0, weight=1)
         parametros.rowconfigure(1, weight=1)
         parametros.rowconfigure(2, weight=1)
@@ -105,26 +106,50 @@ class Interfaz:
         
 
         tiempo = Frame(self.root, background=self.colorFondo)
-        Label(tiempo, text="Elija el tiempo de permanencia de la imagen", font=("Verdana", 18), pady=14, background=self.colorFondo).grid(column=0, row=0, columnspan=2)
+        Label(tiempo, text="Seleccione el tiempo de desplegado de la imagen", font=("Verdana", 18), pady=14, background=self.colorFondo).grid(column=0, row=0, columnspan=2)
         Label(tiempo, text="minutos:", font=("verdana", 14), background=self.colorFondo).grid(column=0, row=1, sticky="w")
-        minutosEntry = Entry(tiempo, font=("verdana", 14))
-        minutosEntry.grid(column=0, row=2, sticky='wn', pady=5)
+        listaMinutos = self.llenarListaMinutos() 
+        minutosBox = ttk.Combobox(tiempo, values=listaMinutos, state="readonly", font=("verdana", 14))
+        minutosBox.grid(column=0, row=2, sticky='wn', pady=5)
+        listaSegundos = self.llenarListaSegundos()
         Label(tiempo, text="segundos:", font=("verdana", 14), background=self.colorFondo).grid(column=1, row=1, sticky="w")
-        segundosEntry = Entry(tiempo, font=("verdana", 14))
-        segundosEntry.grid(column=1, row=2, sticky='wn', pady=5)
+        segundosBox = ttk.Combobox(tiempo, values=listaSegundos, state="readonly", font=("verdana", 14), )
+        segundosBox.grid(column=1, row=2, sticky='wn', pady=5)
         #Label(tiempo, text="", background="white").grid(column=0, row=3, columnspan=3)
         tiempo.grid(row=8, column=3, columnspan=2, rowspan=2, sticky="ns")
         tiempo.grid_rowconfigure(0,weight=1)
         tiempo.grid_rowconfigure(1,weight=1)
         tiempo.grid_rowconfigure(2,weight=1)
         
+        imgRegresar= Image.open("./iconos/arrow.png")
+        imgRegresar= imgRegresar.resize((30, 30))
+        imgRegresar= ImageTk.PhotoImage(imgRegresar)
+        botonRegresar = Button(self.root, text="Regresar  ", image=imgRegresar, compound="right", font=("verdana", 14), command=self.regresar)
+        botonRegresar.grid(column=4, row=11, pady=15, sticky='n')
+        botonRegresar.image = imgRegresar
     
-        imgContinuar = Image.open("./iconos/arrow.png")
-        imgContinuar = imgContinuar.resize((30, 30))
-        imgContinuar = ImageTk.PhotoImage(imgContinuar)
-        botonContinuar = Button(self.root, text="Continuar  ", image=imgContinuar, compound="right", font=("verdana", 14), command=self.continuar)
-        botonContinuar.grid(column=4, row=11, pady=15, sticky='n')
-        botonContinuar.image = imgContinuar
+        imgAgregar= Image.open("./iconos/imagen.png")
+        imgAgregar= imgAgregar.resize((30, 30))
+        imgAgregar= ImageTk.PhotoImage(imgAgregar)
+        botonAgregar = Button(self.root, text="Agregar otra imagen  ", image=imgAgregar, compound="right", font=("verdana", 14), command=self.agregar)
+        botonAgregar.grid(column=4, row=11, pady=15, sticky='n')
+        botonAgregar.image = imgAgregar
+
+        imgVisualizar= Image.open("./iconos/imagen.png")
+        imgVisualizar= imgAgregar.resize((30, 30))
+        imgVisualizar= ImageTk.PhotoImage(imgAgregar)
+        botonAgregar = Button(self.root, text="Visualizar  ", image=imgAgregar, compound="right", font=("verdana", 14), command=self.agregar)
+        botonAgregar.grid(column=4, row=11, pady=15, sticky='n')
+        botonAgregar.image = imgAgregar
+
+        imgTerminar= Image.open("./iconos/arrow.png")
+        imgTerminar= imgTerminar.resize((30, 30))
+        imgTerminar= ImageTk.PhotoImage(imgTerminar)
+        botonTerminar = Button(self.root, text="Terminar  ", image=imgTerminar, compound="right", font=("verdana", 14), command=self.terminar)
+        botonTerminar.grid(column=4, row=11, pady=15, sticky='n')
+        botonTerminar.image = imgTerminar
+
+
         
         self.root.grid_columnconfigure(0,weight=1)
         self.root.grid_columnconfigure(1,weight=1)
@@ -159,39 +184,47 @@ class Interfaz:
     def cargarMenus(self):
 
         miMenu = Menu(self.root)
-        self.root.config(menu=miMenu)
-        archivo = Menu(miMenu, tearoff=0)
-        archivo.add_command(label="Nuevo", font=("Verdana", 11))
-        archivo.add_command(label="Abrir", font=("Verdana", 11))
-        archivo.add_separator()
-        archivo.add_command(label="Guardar", font=("Verdana", 11))
-        archivo.add_command(label="Guardar como", font=("Verdana", 11))
-        archivo.add_separator()
-        archivo.add_command(label="Salir", font=("Verdana", 11), command=self.root.destroy)
-
-        miMenu.add_cascade(label="Archivo", menu=archivo)
+        
         miMenu.add_command(label="Ayuda", command=ventanaAyuda)
-        miMenu.add_command(label="Información", command=self.informacion)  
+        miMenu.add_command(label="Acerca de", command=self.informacion)  
 
     def informacion(self):
-        messagebox.showinfo("Información", "Interfaz para configurar tablero RGB.\n\nVersión: ......")       
+        messagebox.showinfo("Acerca de", "Interfaz para configurar tablero RGB.\n\nVersión: ......")       
     
     def destruir(self):
         self.root.destroy()
 
     def mostrar(self):
         self.root.mainloop()
-    
-    def continuar(self):
-        from agregar import Agregar
+
+    def agregar():
+        pass
+
+    def regresar():
         self.destruir()
-        agregar = Agregar()
-        agregar.cargar()
-        agregar.mostrar()
+        from opciones import *
+        
+    
+    def terminar(self):
+        self.destruir()
+        resumen = Resumen()
+        resumen.cargar()
+        resumen.mostrar()
 
+    def llenarListaMinutos(self):
+        lista = []
+        for i in range (5):
+            lista.append(str(i))
+        return lista
+            
+    def llenarListaSegundos(self):
+        lista = []
+        for i in range (60):
+            lista.append(str(i))
+        return lista
 
-#programa = Interfaz()
-#programa.cargar()
-#programa.cargarMenus()
-#programa.mostrar()
+programa = Interfaz()
+programa.cargar()
+programa.cargarMenus()
+programa.mostrar()
 
