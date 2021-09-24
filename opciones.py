@@ -1,5 +1,5 @@
 from os import cpu_count
-from principal import *
+#from principal import *
 from tkinter import *
 from tkinter import ttk
 import os.path
@@ -7,7 +7,6 @@ from PIL import Image, ImageTk
 from tkinter import messagebox
 from tkinter import filedialog
 from ayuda import *
-
 
 class Opciones:
     def __init__(self):
@@ -82,6 +81,7 @@ class Opciones:
 
     def ventanaPrincipal(self):
         self.cerrar()
+        from principal import Interfaz
         programa = Interfaz()
         programa.cargar()
         programa.cargarMenus()

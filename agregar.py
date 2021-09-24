@@ -81,7 +81,9 @@ class Agregar:
     
     def visualizar(self):
         self.root.destroy()
-        mostrar()
+        from visualizar import Visualizar
+        visualizar = Visualizar()
+        visualizar.mostrar()
 
     def resumen(self):
         self.cerrar()
