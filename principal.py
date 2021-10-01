@@ -8,10 +8,7 @@ from tkinter import filedialog
 from ayuda import *
 from resumen import *
 from opciones import Opciones
-
-
-# from agregar import Agregar
-
+from visualizar import Visualizar
 
 class Interfaz:
 
@@ -117,15 +114,13 @@ class Interfaz:
         tiempo = Frame(self.root, background=self.colorFondo)
         Label(tiempo, text="Seleccione el tiempo de desplegado de la imagen", font=("Verdana", 18), pady=14,
               background=self.colorFondo).grid(column=0, row=0, columnspan=2)
-        Label(tiempo, text="minutos:", font=("verdana", 14), background=self.colorFondo).grid(column=0, row=1,
-                                                                                              sticky="w")
-        listaMinutos = self.llenarListaMinutos()
-        minutosBox = ttk.Combobox(tiempo, values=listaMinutos, state="readonly", font=("verdana", 14))
+        
+        Label(tiempo, text="minutos:", font=("verdana", 14), background=self.colorFondo).grid(column=0, row=1,                                                                                      sticky="w")
+        minutosBox = ttk.Spinbox(tiempo, from_=0, to=4, increment=1, state="readonly", font=("verdana", 14))
         minutosBox.grid(column=0, row=2, sticky='wn', pady=5)
-        listaSegundos = self.llenarListaSegundos()
-        Label(tiempo, text="segundos:", font=("verdana", 14), background=self.colorFondo).grid(column=1, row=1,
-                                                                                               sticky="w")
-        segundosBox = ttk.Combobox(tiempo, values=listaSegundos, state="readonly", font=("verdana", 14), )
+        
+        Label(tiempo, text="segundos:", font=("verdana", 14), background=self.colorFondo).grid(column=1, row=1, sticky="w")
+        segundosBox = ttk.Spinbox(tiempo, from_=0, to=59, increment=1, state="readonly", font=("verdana", 14))
         segundosBox.grid(column=1, row=2, sticky='wn', pady=5)
         # Label(tiempo, text="", background="white").grid(column=0, row=3, columnspan=3)
         tiempo.grid(row=8, column=3, columnspan=2, rowspan=2, sticky="ns")
@@ -160,7 +155,7 @@ class Interfaz:
         imgTerminar = Image.open("./iconos/arrow.png")
         imgTerminar = imgTerminar.resize((30, 30))
         imgTerminar = ImageTk.PhotoImage(imgTerminar)
-        botonTerminar = Button(self.root, text="Terminar  ", image=imgTerminar, compound="right", font=("verdana", 14),
+        botonTerminar = Button(self.root, text="Resumen de la configuración  ", image=imgTerminar, compound="right", font=("verdana", 14),
                                command=self.terminar)
         botonTerminar.grid(column=4, row=11, pady=15, sticky='n')
         botonTerminar.image = imgTerminar
@@ -221,8 +216,6 @@ class Interfaz:
         opciones.mostrar()
 
     def visualizar(self):
-        self.destruir()
-        from visualizar import Visualizar
         visualizar = Visualizar()
         visualizar.mostrar()  # Pantalla de visualizar
 
@@ -244,7 +237,7 @@ class Interfaz:
             lista.append(str(i))
         return lista
 
-# programa = Interfaz()
-# programa.cargar()
-# programa.cargarMenus()
-# programa.mostrar()
+programa = Interfaz()
+programa.cargar()
+programa.cargarMenus()
+programa.mostrar()

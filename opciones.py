@@ -7,6 +7,8 @@ from PIL import Image, ImageTk
 from tkinter import messagebox
 from tkinter import filedialog
 from ayuda import *
+#from interfaz import Bienvenida
+
 
 class Opciones:
     def __init__(self):
@@ -50,13 +52,13 @@ class Opciones:
         botonConfig.grid(row=1, column=0, padx=50, sticky="w")
         botonConfig.image = imgConfig
 
-        imgUSB = Image.open('./iconos/usb.jpg')
-        imgUSB = imgUSB.resize((40, 40))
-        imgUSB = ImageTk.PhotoImage(imgUSB)
-        botonUSB = Button(self.root, image=imgUSB, text="Cargar desde un dispositivo  ", width=350, compound="right",
-                          background="white", activebackground="#999999", font=("Verdana", 14))
-        botonUSB.grid(row=2, column=0, padx=80, sticky="wn")
-        botonUSB.image = imgUSB
+        imgSalir= Image.open('./iconos/quit.jpg')
+        imgSalir= imgSalir.resize((40, 40))
+        imgSalir= ImageTk.PhotoImage(imgSalir)
+        botonSalir = Button(self.root, image=imgSalir, text="Salir  ", width=350, compound="right",
+                          background="white", activebackground="#999999", font=("Verdana", 14), command=self.salir)
+        botonSalir.grid(row=2, column=0, padx=80, sticky="wn")
+        botonSalir.image = imgSalir
 
         fondoImagen = Image.open("./recursos/computadora.png")
         fondoImagen = fondoImagen.resize((200, 200))
@@ -87,6 +89,9 @@ class Opciones:
         programa.cargarMenus()
         programa.mostrar()
 
-# opciones = Opciones()
-# opciones.cargar()
-# opciones.mostrar()
+    def salir(self):
+        self.cerrar()
+
+#opciones = Opciones()
+#opciones.cargar()
+#opciones.mostrar()

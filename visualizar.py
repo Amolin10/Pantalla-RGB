@@ -4,7 +4,6 @@ from pygame import *
 import sys, pygame
 from pygame.draw import line
 from pygame.font import SysFont
-from principal import *
 
 class Visualizar:
 
@@ -66,7 +65,6 @@ class Visualizar:
         clock = pygame.time.Clock()
         FPS = 17
 
-
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -84,20 +82,14 @@ class Visualizar:
             ventana.blit(tiempo, (50,290))
             ventana.blit(seg, (230,290))
 
-           # if event.type == MOUSEBUTTONDOWN:
-           #     if regresar.collidepoint(pygame.mouse.get_pos()):
-           #         interfaz = Interfaz()
-           #         interfaz.cargar()
-           #         interfaz.mostrar()
-           #         sys.exit()
-                    
-                    
-
+            if event.type == MOUSEBUTTONDOWN:
+                if regresar.collidepoint(pygame.mouse.get_pos()):
+                    sys.exit()
 
             crearBoton(ventana, play, "Play")
             crearBoton(ventana, pause, "Pause")
             crearBoton(ventana, stop, "Stop")
-            crearBoton(ventana, regresar, "Regresar")
+            crearBoton(ventana, regresar, "Salir")
             crearBoton(ventana, vel1, "Velocidad  x1")
             crearBoton(ventana, vel2, "Velocidad  x2")
             crearBoton(ventana, vel4, "Velocidad  x4")

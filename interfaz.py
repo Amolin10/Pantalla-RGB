@@ -1,6 +1,9 @@
 import os.path
-#from ayuda import *
-from opciones import *
+from ayuda import *
+#from opciones import Opciones
+from tkinter import *
+from PIL import Image, ImageTk
+from opciones import Opciones
 
 class Bienvenida:
 
@@ -82,8 +85,7 @@ class Bienvenida:
         imgContinuar = Image.open("./iconos/arrow.png")
         imgContinuar = imgContinuar.resize((20, 20))
         imgContinuar = ImageTk.PhotoImage(imgContinuar)
-        botonContinuar = Button(fondo, image=imgContinuar, text="Continuar  ", compound="right",
-                                command=self.continuarOpciones)
+        botonContinuar = Button(fondo, image=imgContinuar, text="Continuar  ", compound="right", command=self.continuarOpciones)
         botonContinuar.grid(row=4, column=1)
         botonContinuar.image = imgContinuar
 
@@ -106,7 +108,9 @@ class Bienvenida:
         opciones.cargar()
         opciones.mostrar()
 
-
 bienvenida = Bienvenida()
 bienvenida.cargar()
 bienvenida.mostrar()
+
+#bienvenida.cargar()
+#bienvenida.mostrar()
