@@ -83,8 +83,8 @@ class Opciones:
 
     def ventanaPrincipal(self):
         self.cerrar()
-        from principal import Interfaz
-        programa = Interfaz()
+        from configuracion import Configuracion
+        programa = Configuracion()
         programa.cargar()
         programa.cargarMenus()
         programa.mostrar()

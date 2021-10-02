@@ -5,6 +5,7 @@ from tkinter import *
 from PIL import Image, ImageTk
 from opciones import Opciones
 
+
 class Bienvenida:
 
     def __init__(self):
