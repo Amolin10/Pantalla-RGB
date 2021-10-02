@@ -206,11 +206,17 @@ class Opciones:
 class Configuracion:
 
     def __init__(self):
+        self.imagen_ruta = ''
+        self.opcion_efecto = None
+        self.minutos = 0
+        self.segundos = 0
+        
         self.title = "Letrero RGB"
         self.icon = "./iconos/firefly.ico"
         self.resizable = True
         self.root = "Tk()"
         self.colorFondo = '#E2EFFF'
+        
 
     def cargar(self):
         self.root = Tk()
@@ -283,20 +289,20 @@ class Configuracion:
         imagenFrame.grid(row=6, column=0, columnspan=2, rowspan=5, sticky="ns", pady=20)
 
         parametros = Frame(self.root, background=self.colorFondo)
+       
         ########Poner una variable a los radiobutons##########################
-        Label(parametros, text="Selecciona el efecto de entrada de la imagen", font=("Verdana", 18),
-              background=self.colorFondo).grid(column=0, row=0, columnspan=3)
-        Radiobutton(parametros, text="Instantaneo", font=("verdana", 14), background=self.colorFondo).grid(column=0,
-                                                                                                           row=1, )
-        Radiobutton(parametros, text="De abajo a arriba", font=("verdana", 14), background=self.colorFondo,
-                    padx=20).grid(column=1, row=1, sticky="ew")
-        Radiobutton(parametros, text="Aleatorio", font=("verdana", 14), background=self.colorFondo).grid(column=2,
-                                                                                                         row=1,
-                                                                                                         sticky="e")
-        Radiobutton(parametros, text="De derecha a izquierda", font=("verdana", 14), background=self.colorFondo).grid(
-            column=0, row=2, sticky="e")
-        Radiobutton(parametros, text="De arriba a abajo", font=("verdana", 14), background=self.colorFondo).grid(
-            column=2, row=2, sticky="w")
+
+        self.opcion_efecto = StringVar()
+        self.opcion_efecto.set(None)
+
+        Label(parametros, text="Selecciona el efecto de entrada de la imagen", font=("Verdana", 18), background=self.colorFondo).grid(column=0, row=0, columnspan=3)
+        
+        Radiobutton(parametros, text="Instantaneo", font=("verdana", 14), variable=self.opcion_efecto, value='Instantaneo.py', background=self.colorFondo).grid(column=0, row=1)
+        Radiobutton(parametros, text="De abajo a arriba", font=("verdana", 14), variable=self.opcion_efecto, value='AbajoArriba.py', background=self.colorFondo, padx=20).grid(column=1, row=1, sticky="ew")
+        Radiobutton(parametros, text="Aleatorio", font=("verdana", 14), variable=self.opcion_efecto, value='Aleatorio.py', background=self.colorFondo).grid(column=2, row=1, sticky="e")
+        Radiobutton(parametros, text="De derecha a izquierda", font=("verdana", 14), variable=self.opcion_efecto, value = 'DerechaIzquierda.py', background=self.colorFondo).grid(column=0, row=2, sticky="e")
+        Radiobutton(parametros, text="De arriba a abajo", font=("verdana", 14), variable=self.opcion_efecto, value='ArribaAbajo.py', background=self.colorFondo).grid(column=2, row=2, sticky="w")
+        
         Label(parametros, text="", background=self.colorFondo).grid(column=0, row=3, columnspan=3)
         parametros.rowconfigure(0, weight=1)
         parametros.rowconfigure(1, weight=1)
@@ -308,12 +314,18 @@ class Configuracion:
         Label(tiempo, text="Seleccione el tiempo de desplegado de la imagen", font=("Verdana", 18), pady=14,
               background=self.colorFondo).grid(column=0, row=0, columnspan=2)
         
-        Label(tiempo, text="minutos:", font=("verdana", 14), background=self.colorFondo).grid(column=0, row=1,                                                                                      sticky="w")
-        minutosBox = ttk.Spinbox(tiempo, from_=0, to=4, increment=1, state="readonly", font=("verdana", 14))
+        self.minutos = StringVar()
+        #self.minutos.set('0')
+        
+        Label(tiempo, text="minutos:", font=("verdana", 14), background=self.colorFondo).grid(column=0, row=1, sticky="w")
+        minutosBox = ttk.Spinbox(tiempo, from_=0, to=4, increment=1, state="readonly", font=("verdana", 14), textvariable=self.minutos)
         minutosBox.grid(column=0, row=2, sticky='wn', pady=5)
         
+        self.segundos = StringVar()
+        #self.segundos.set('0')
+        
         Label(tiempo, text="segundos:", font=("verdana", 14), background=self.colorFondo).grid(column=1, row=1, sticky="w")
-        segundosBox = ttk.Spinbox(tiempo, from_=0, to=59, increment=1, state="readonly", font=("verdana", 14))
+        segundosBox = ttk.Spinbox(tiempo, from_=0, to=59, increment=1, state="readonly", font=("verdana", 14), textvariable=self.segundos)
         segundosBox.grid(column=1, row=2, sticky='wn', pady=5)
         # Label(tiempo, text="", background="white").grid(column=0, row=3, columnspan=3)
         tiempo.grid(row=8, column=3, columnspan=2, rowspan=2, sticky="ns")
@@ -381,6 +393,7 @@ class Configuracion:
             imagenOriginal.image = ImagenEntrada
             imagenOriginal.grid(column=0, row=2, sticky=N)
             imagenOriginal.config(relief="solid")
+            self.imagen_ruta = archivo
 
     def cargarMenus(self):
 
@@ -399,13 +412,18 @@ class Configuracion:
         self.root.mainloop()
 
     def agregar(self):
-        print("Hola")
+        tiempo = (int(self.minutos.get()) * 60) + int(self.segundos.get())
+        print(f'Imagen: {self.imagen_ruta}\n Efecto: {self.opcion_efecto.get()}\n Tiempo: {tiempo}')
+        datos = Datos(len(lista_configuracion), self.imagen_ruta, self.opcion_efecto.get(), tiempo)
+        lista_configuracion.append(datos)
+        print(lista_configuracion)
 
     def regresar(self):
         self.destruir()
         opciones = Opciones()
         opciones.cargar()
         opciones.mostrar()
+
 
     def visualizar(self):
         #visualizar = Visualizar()
@@ -735,8 +753,14 @@ class ConfiguracionResumen:
 
 ########################Main###########################
 
-bienvenida = Bienvenida()
-bienvenida.cargar()
-bienvenida.mostrar()
+#bienvenida = Bienvenida()
+#bienvenida.cargar()
+#bienvenida.mostrar()
 
-lista = []
+lista_configuracion = []
+
+configuracion = Configuracion()
+configuracion.cargar()
+configuracion.mostrar()
+
+
