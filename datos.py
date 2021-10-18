@@ -15,7 +15,7 @@ class Datos:
     def set_imegen(self, imagen):
         self.imagen = imagen
     
-    def get_imegen(self):
+    def get_imagen(self):
         return self.imagen
     
     def set_efecto(self, efecto):

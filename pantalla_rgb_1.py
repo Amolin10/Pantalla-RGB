@@ -483,6 +483,7 @@ class Resumen:
         self.resizable = True
         self.root = "Tk()"
         self.color_fondo = '#E2EFFF'
+        self.tabla_frame = ''
 
     def cargar(self):
         self.root = Tk()
@@ -528,36 +529,39 @@ class Resumen:
         texto.grid(row=2, column=0, columnspan=5, sticky="ewns")
         Label(self.root, text="", background=self.color_fondo).grid(row=3, column=0, columnspan=5, pady=5)
         ttk.Separator(self.root, orient=HORIZONTAL).grid(row=4, column=0, columnspan=5, sticky="ews")
-
-        resumenFrame = LabelFrame(self.root, text='Resumen de la configuración', background='white')
-        resumenFrame.grid(row=5, column=0, rowspan=5, columnspan=5)
-
         
-        opciones_frame = Frame(self.root, background=self.color_fondo)
+        self.tabla_frame = Frame(self.root, background=self.color_fondo, pady=20)
+        self.tabla_frame.grid(row=5, column=0, columnspan=5, rowspan=3, sticky="ews")
+        
+        
+        opciones_frame = Frame(self.root, background=self.color_fondo, pady=10)
         opcion_editar = StringVar()
-        opcion_entry = Entry(opciones_frame, textvariable=opcion_editar, font=("Verdana", 12))
-        opcion_entry.grid(column=0, row=0)
+        opcion_entry = Entry(opciones_frame, textvariable=opcion_editar, font=("Verdana", 12), width=10)
+        opcion_entry.grid(column=0, row=0, sticky="e", padx=10, ipady=4)
+        Button(opciones_frame, text="Editar", font=("Verdana", 12), command=lambda: self.editar_opcion(opcion_editar.get())).grid(column=1, row=0, ipadx=10, sticky='w', padx=10)
+        Label(opciones_frame, text= "Seleccione una imagen para editar", font=("Verdana", 12), background=self.color_fondo).grid(column=0, row=1, columnspan=2, pady=5)
+        Button(opciones_frame, text="Visualizar\nConfiguración", font=("Verdana", 12), command=self.visualizar).grid(ipadx=10, column=3, row=0, rowspan=2, sticky='nes')
+        opciones_frame.grid(row=7, column=0, columnspan=5, sticky="ews")
         
-        Button(opciones_frame, text="Editar", font=("Verdana", 12), command=lambda: self.editar_opcion(opcion_editar.get())).grid(column=1, row=0, ipadx=10)
-        
-        Label(opciones_frame, text= "Seleccione una imagen para editar", font=("Verdana", 12)).grid(column=0, row=1, columnspan=2)
-        
-        Button(opciones_frame, text="Visualizar\nConfiguración", font=("Verdana", 12), command=self.visualizar).grid(ipadx=10, column=3, row=0, rowspan=2, sticky='w')
-        
+        opciones_frame.columnconfigure(0, weight=1)
+        opciones_frame.columnconfigure(1, weight=1)
+        opciones_frame.columnconfigure(2, weight=1)
+        opciones_frame.columnconfigure(3, weight=1)
+        opciones_frame.columnconfigure(4, weight=1)
         
         ttk.Separator(self.root, orient=HORIZONTAL).grid(row=8, column=0, columnspan=5, sticky="ews")
         
         imgSalir = Image.open("./iconos/quit.jpg")
         imgSalir = imgSalir.resize((30, 30))
         imgSalir = ImageTk.PhotoImage(imgSalir)
-        botonSalir = Button(self.root, image=imgSalir, text="Salir   ", compound="right", font=("Verdana", 12), background='white', activebackground="#999999")
+        botonSalir = Button(self.root, image=imgSalir, text="Salir   ", compound="right", font=("Verdana", 12), activebackground="#999999")
         botonSalir.grid(row=9, column=0, ipadx=20, padx=15, pady=15, sticky="es")
         botonSalir.image = imgSalir
 
         imgSave=Image.open("./iconos/save.ico")
         imgSave = imgSave.resize((30, 30))
         imgSave = ImageTk.PhotoImage(imgSave)
-        botonSave = Button(self.root, image=imgSave, text="Guardar   ", compound="right", font=("Verdana", 12), background='white', activebackground="#999999")
+        botonSave = Button(self.root, image=imgSave, text="Guardar   ", compound="right", font=("Verdana", 12), activebackground="#999999")
         botonSave.grid(row=9, column=4, ipadx=20, padx=15, pady=15, sticky="ws")
         botonSave.image = imgSave
 
@@ -580,6 +584,36 @@ class Resumen:
     
     def visualizar(self):
         pass
+    
+    def llenar_tabla(self):
+        #print(f"""{lista_configuracion[0]}
+        #{lista_configuracion[1]}
+        #{lista_configuracion[2]}""")
+        lista_configuracion
+        Label(self.tabla_frame, text="Índice", font=("Verdana", 12), background=self.color_fondo).grid(row=0, column=0)
+        Label(self.tabla_frame, text="Imagen", font=("Verdana", 12), background=self.color_fondo).grid(row=0, column=1)
+        Label(self.tabla_frame, text="Efecto", font=("Verdana", 12), background=self.color_fondo).grid(row=0, column=2)
+        Label(self.tabla_frame, text="Tiempo", font=("Verdana", 12), background=self.color_fondo).grid(row=0, column=3)
+        for i, item in enumerate(lista_configuracion):
+            indice = i + 1
+            imagen = item.get_imagen()
+            efecto = item.get_efecto()
+            tiempo = item.get_tiempo()
+            
+            imagen_muestra = Image.open(imagen) 
+            imagen_muestra = imagen_muestra.resize((110,50))
+            imagen_muestra = ImageTk.PhotoImage(imagen_muestra)
+            #print(f'{indice}  {imagen}  {efecto} {tiempo}')
+            Label(self.tabla_frame, text=indice, font=("Verdana", 12), background=self.color_fondo).grid(column=0, row=i+1)
+            imagen_label = Label(self.tabla_frame, image=imagen_muestra, width=110, height=50, background=self.color_fondo)
+            imagen_label.grid(column=1, row=i+1)
+            imagen_label.image = imagen_muestra
+            Label(self.tabla_frame, text=efecto, font=("Verdana", 12), background=self.color_fondo).grid(column=2, row=i+1)
+            Label(self.tabla_frame, text=tiempo, font=("Verdana", 12), background=self.color_fondo).grid(column=3, row=i+1)
+            #pass
+            
+            
+            
 ########################Termina Resumen#################################
 
 
@@ -908,9 +942,7 @@ lista_configuracion.append(datos1)
 lista_configuracion.append(datos2)
 lista_configuracion.append(datos3)
 
-print(f"""{lista_configuracion[0]}
-{lista_configuracion[1]}
-{lista_configuracion[2]}""")
+
 #bienvenida = Bienvenida()
 #bienvenida.cargar()
 #bienvenida.mostrar()
@@ -920,6 +952,12 @@ print(f"""{lista_configuracion[0]}
 #configuracion.mostrar()
 
 resumen = Resumen()
+
 resumen.cargar()
+
+resumen.llenar_tabla()
+
 resumen.mostrar()
+
+#resumen.llenar_tabla()
 
