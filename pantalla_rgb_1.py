@@ -1,7 +1,6 @@
 from os import lseek
 import os.path
 from ayuda import *
-#from opciones import Opciones
 from tkinter import *
 from PIL import Image, ImageTk
 from opciones import Opciones
@@ -9,7 +8,13 @@ from tkinter import messagebox
 from tkinter import filedialog
 from datos import Datos
 
-#############################Bienvenida####################################
+    
+from pygame import * 
+import sys, pygame
+from pygame.draw import line
+from pygame.font import SysFont
+
+############################# Bienvenida ####################################
 class Bienvenida:    
     def __init__(self):
         self.title = "Letrero RGB Inicio"
@@ -207,6 +212,7 @@ class Configuracion:
 
     def __init__(self):
         self.imagen_ruta = ''
+        self.label_imagen = ''
         self.opcion_efecto = None
         self.minutos = 0
         self.segundos = 0
@@ -272,6 +278,9 @@ class Configuracion:
         imagenFrame = Frame(self.root, background=self.colorFondo, pady=10)
         Label(imagenFrame, text="Selecciona una imagen para\nmostrar en la pantalla RGB", font=("verdana", 18), padx=10,
               background=self.colorFondo).grid(row=0, column=0, sticky="n")
+        #self.label_imagen = Label(imagenFrame, background=self.colorFondo)
+        #self.label_imagen.grid(column=0, row=2, sticky=N)
+        
         imgImagen = Image.open("./iconos/imagen.png")
         imgImagen = imgImagen.resize((30, 30))
         imgImagen = ImageTk.PhotoImage(imgImagen)
@@ -380,7 +389,7 @@ class Configuracion:
         self.root.grid_rowconfigure(8, weight=1)
         # self.root.grid_rowconfigure(9,weight=1)
 
-    def selecImagen(self, imagenFrame):
+    def selecImagenX(self, imagenFrame):
         archivo = filedialog.askopenfilename(filetypes=[('Archivos de imagen', '*.jpg *.png *.jpeg *.ppm')])
 
         if archivo is not None:
@@ -394,9 +403,24 @@ class Configuracion:
             imagenOriginal.grid(column=0, row=2, sticky=N)
             imagenOriginal.config(relief="solid")
             self.imagen_ruta = archivo
+    
+    def selecImagen(self, imagenFrame):
+        archivo = filedialog.askopenfilename(filetypes=[('Archivos de imagen', '*.jpg *.png *.jpeg *.ppm')])
+
+        if archivo is not None:
+            # Imagen de entrada
+            imagenEntrada = Image.open(archivo)
+            imagenEntrada = imagenEntrada.resize((640, 240))  # 128x48
+            ImagenEntrada = ImageTk.PhotoImage(imagenEntrada)
+            self.label_imagen = Label(imagenFrame, background=self.colorFondo)
+            #imagenOriginal = Label(imagenFrame, image=ImagenEntrada)
+            self.label_imagen.config(image = ImagenEntrada)
+            self.label_imagen.image = ImagenEntrada
+            self.label_imagen.grid(column=0, row=2, sticky=N)
+            self.label_imagen.config(relief="solid")
+            self.imagen_ruta = archivo
 
     def cargarMenus(self):
-
         miMenu = Menu(self.root)
 
         miMenu.add_command(label="Ayuda", command=ventanaAyuda)
@@ -413,10 +437,11 @@ class Configuracion:
 
     def agregar(self):
         tiempo = (int(self.minutos.get()) * 60) + int(self.segundos.get())
-        print(f'Imagen: {self.imagen_ruta}\n Efecto: {self.opcion_efecto.get()}\n Tiempo: {tiempo}')
+        #print(f'Imagen: {self.imagen_ruta}\n Efecto: {self.opcion_efecto.get()}\n Tiempo: {tiempo}')
         datos = Datos(len(lista_configuracion), self.imagen_ruta, self.opcion_efecto.get(), tiempo)
         lista_configuracion.append(datos)
         print(lista_configuracion)
+        self.limpiar_configuracion()
 
     def regresar(self):
         self.destruir()
@@ -426,8 +451,8 @@ class Configuracion:
 
 
     def visualizar(self):
-        #visualizar = Visualizar()
-        #visualizar.mostrar()  # Pantalla de visualizar
+        visualizar = Visualizar()
+        visualizar.mostrar()  # Pantalla de visualizar
         pass
 
     def terminar(self):
@@ -436,17 +461,16 @@ class Configuracion:
         resumen.cargar()
         resumen.mostrar()
 
-    def llenarListaMinutos(self):
-        lista = []
-        for i in range(5):
-            lista.append(str(i))
-        return lista
-
-    def llenarListaSegundos(self):
-        lista = []
-        for i in range(60):
-            lista.append(str(i))
-        return lista
+    def limpiar_configuracion(self):
+        self.imagen_ruta = ''
+        self.label_imagen.config(image = None)
+        self.label_imagen.config(relief="flat") 
+        self.label_imagen.image = None   
+        self.opcion_efecto.set(None)
+        self.minutos.set("")
+        self.segundos.set("")
+    
+    
 ########################Termina Configuración################################# 
 
 
@@ -458,6 +482,7 @@ class Resumen:
         self.icon = "./iconos/firefly.ico"
         self.resizable = True
         self.root = "Tk()"
+        self.color_fondo = '#E2EFFF'
 
     def cargar(self):
         self.root = Tk()
@@ -470,7 +495,7 @@ class Resumen:
         yVentana = self.root.winfo_screenheight() // 2 - alto // 2
         posicion = str(ancho) + "x" + str(alto) + "+" + str(xVentana)+ "+" + str(yVentana)
         self.root.geometry(posicion)
-        self.root.config(background='#E2EFFF')
+        self.root.config(background=self.color_fondo)
 
         if self.resizable:
             self.root.resizable(1, 1)
@@ -501,23 +526,38 @@ class Resumen:
         titulo = Label(self.root, text="Insertar título", font=("Verdana", 28), relief="groove", background='#184B6C', fg='white').grid(row=1, column=0, columnspan=5, sticky='ewns')
         texto = Label(self.root, text="Resumen de la configuración", relief='groove',font=("Verdana", 22), background='#2980B9')
         texto.grid(row=2, column=0, columnspan=5, sticky="ewns")
-        Label(self.root, text="", background='#E2EFFF').grid(row=3, column=0, columnspan=5, pady=5)
+        Label(self.root, text="", background=self.color_fondo).grid(row=3, column=0, columnspan=5, pady=5)
         ttk.Separator(self.root, orient=HORIZONTAL).grid(row=4, column=0, columnspan=5, sticky="ews")
 
         resumenFrame = LabelFrame(self.root, text='Resumen de la configuración', background='white')
         resumenFrame.grid(row=5, column=0, rowspan=5, columnspan=5)
 
-        imgUSB=Image.open("./iconos/usb.jpg")
-        imgUSB = imgUSB.resize((30, 30))
-        imgUSB = ImageTk.PhotoImage(imgUSB)
-        botonUSB = Button(self.root, image=imgUSB, text="Guardar en dispositivo\nde almacenamiento", compound="bottom", font=("Verdana", 12), background='white', activebackground="#999999")
-        botonUSB.grid(row=9, column=2,  padx=15, pady=15, sticky="ws")
-        botonUSB.image = imgUSB
+        
+        opciones_frame = Frame(self.root, background=self.color_fondo)
+        opcion_editar = StringVar()
+        opcion_entry = Entry(opciones_frame, textvariable=opcion_editar, font=("Verdana", 12))
+        opcion_entry.grid(column=0, row=0)
+        
+        Button(opciones_frame, text="Editar", font=("Verdana", 12), command=lambda: self.editar_opcion(opcion_editar.get())).grid(column=1, row=0, ipadx=10)
+        
+        Label(opciones_frame, text= "Seleccione una imagen para editar", font=("Verdana", 12)).grid(column=0, row=1, columnspan=2)
+        
+        Button(opciones_frame, text="Visualizar\nConfiguración", font=("Verdana", 12), command=self.visualizar).grid(ipadx=10, column=3, row=0, rowspan=2, sticky='w')
+        
+        
+        ttk.Separator(self.root, orient=HORIZONTAL).grid(row=8, column=0, columnspan=5, sticky="ews")
+        
+        imgSalir = Image.open("./iconos/quit.jpg")
+        imgSalir = imgSalir.resize((30, 30))
+        imgSalir = ImageTk.PhotoImage(imgSalir)
+        botonSalir = Button(self.root, image=imgSalir, text="Salir   ", compound="right", font=("Verdana", 12), background='white', activebackground="#999999")
+        botonSalir.grid(row=9, column=0, ipadx=20, padx=15, pady=15, sticky="es")
+        botonSalir.image = imgSalir
 
         imgSave=Image.open("./iconos/save.ico")
         imgSave = imgSave.resize((30, 30))
         imgSave = ImageTk.PhotoImage(imgSave)
-        botonSave = Button(self.root, image=imgSave, text="Guardar", compound="bottom", font=("Verdana", 12), background='white', activebackground="#999999")
+        botonSave = Button(self.root, image=imgSave, text="Guardar   ", compound="right", font=("Verdana", 12), background='white', activebackground="#999999")
         botonSave.grid(row=9, column=4, ipadx=20, padx=15, pady=15, sticky="ws")
         botonSave.image = imgSave
 
@@ -534,6 +574,12 @@ class Resumen:
 
     def mostrar(self):
         self.root.mainloop()
+        
+    def editar_opcion(self, opcion_numero):
+        pass
+    
+    def visualizar(self):
+        pass
 ########################Termina Resumen#################################
 
 
@@ -751,16 +797,129 @@ class ConfiguracionResumen:
 ########################Termina Configuracion Resumen#################################
 
 
+########################Visualizar#################################
+class Visualizar:    
+    def mostrar(self): 
+        pygame.init()
+
+        size = (1200, 560)
+
+        ventana = pygame.display.set_mode(size)
+
+        blanco = (255,255,255)
+        silver = (192,192,192)
+        negro = (0,0,0)
+        gray = (128,128,128)
+        lightblue = (173,216,230)
+
+        #Imagen de ventana y título
+        pygame.display.set_caption("Visualizar")
+        icono = pygame.image.load("./recursos/firefly.png")
+        pygame.display.set_icon(icono)
+
+
+        uam = pygame.image.load("./recursos/uamazcL.png")
+        uamAzc = pygame.transform.scale(uam, (300, 80))
+        cbi = pygame.image.load("./recursos/cbi.png")
+        cbiAzc = pygame.transform.scale(cbi, (300, 80))
+
+        prueba = pygame.image.load("./recursos/RGB.jpg")
+        pruebaR = pygame.transform.scale(prueba, (360, 140))
+
+        miFuente = pygame.font.SysFont("Verdana", 30)
+        text = miFuente.render("Visualización de animación", 0, (negro))
+        fuente = pygame.font.SysFont("Verdana", 20)
+        nomImagen = fuente.render("Nombre de imagen: ", 0, (negro))
+        nomEfecto = fuente.render("Efecto: ", 0, (negro))
+        tiempo = fuente.render("Tiempo: ", 0, (negro))
+        seg = fuente.render("segundos.", 0, (negro))
+
+        play = Rect(660, 380, 80, 25)
+        pause = Rect(860, 380, 80, 25)
+        stop = Rect(1060, 380, 80, 25)
+        regresar = Rect(1060, 500, 80, 25)
+        vel1 = Rect(635, 430, 130, 25)
+        vel2 = Rect(835, 430, 130, 25)
+        vel4 = Rect(1037, 430, 130, 25)
+
+        fuente2 = pygame.font.SysFont("Calibri", 20)
+
+        def crearBoton(screen, boton, mensaje):
+            if boton.collidepoint(pygame.mouse.get_pos()):
+                pygame.draw.rect(ventana, silver, boton)
+            else:
+                pygame.draw.rect(ventana, gray, boton)
+            texto = fuente2.render(mensaje, True, (blanco))
+            screen.blit(texto, (boton.x+(boton.width-texto.get_width())/2,
+            boton.y+(boton.height-texto.get_height())/2)
+            )
+
+        clock = pygame.time.Clock()
+        FPS = 17
+
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+            ventana.fill(blanco)    #Color de fondo
+            ventana.blit(uamAzc, (50, 20))
+            ventana.blit(text, (400,40))
+            ventana.blit(cbiAzc, (850, 20))
+            pygame.draw.line(ventana, negro, (0,120), (1200,120), 5)
+            pygame.draw.line(ventana, negro, (600,120), (600,600), 5)
+            pygame.draw.rect(ventana, silver, (720, 200, 360, 140))
+            ventana.blit(pruebaR, (720, 200))
+            ventana.blit(nomImagen, (50,150))
+            ventana.blit(nomEfecto, (50,220))
+            ventana.blit(tiempo, (50,290))
+            ventana.blit(seg, (230,290))
+
+            if event.type == MOUSEBUTTONDOWN:
+                if regresar.collidepoint(pygame.mouse.get_pos()):
+                    self.salir()
+                    pass
+
+            crearBoton(ventana, play, "Play")
+            crearBoton(ventana, pause, "Pause")
+            crearBoton(ventana, stop, "Stop")
+            crearBoton(ventana, regresar, "Salir")
+            crearBoton(ventana, vel1, "Velocidad  x1")
+            crearBoton(ventana, vel2, "Velocidad  x2")
+            crearBoton(ventana, vel4, "Velocidad  x4")
+
+            pygame.display.flip()
+            clock.tick(FPS)
+            
+    def salir(self):
+        pygame.quit()
+########################Termina Visualizar#################################
+
+
+
+
 ########################Main###########################
 
+lista_configuracion = []
+datos1 = Datos(0, './recursos/micro.jpg', 'Aleatorio.py', 61)
+datos2 = Datos(1, './recursos/RGB.jpg', 'Derecha a Izquierda.py', 40)
+datos3 = Datos(2, './recursos/electronica.jpg', 'IzqDer.py', 51)
+
+lista_configuracion.append(datos1)
+lista_configuracion.append(datos2)
+lista_configuracion.append(datos3)
+
+print(f"""{lista_configuracion[0]}
+{lista_configuracion[1]}
+{lista_configuracion[2]}""")
 #bienvenida = Bienvenida()
 #bienvenida.cargar()
 #bienvenida.mostrar()
 
-lista_configuracion = []
+#configuracion = Configuracion()
+#configuracion.cargar()
+#configuracion.mostrar()
 
-configuracion = Configuracion()
-configuracion.cargar()
-configuracion.mostrar()
-
+resumen = Resumen()
+resumen.cargar()
+resumen.mostrar()
 
