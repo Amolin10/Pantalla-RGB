@@ -12,7 +12,7 @@ class Datos:
     def get_numero(self):
         return self.numero
     
-    def set_imegen(self, imagen):
+    def set_imagen(self, imagen):
         self.imagen = imagen
     
     def get_imagen(self):

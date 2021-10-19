@@ -531,7 +531,7 @@ class Resumen:
         ttk.Separator(self.root, orient=HORIZONTAL).grid(row=4, column=0, columnspan=5, sticky="ews")
         
         self.tabla_frame = Frame(self.root, background=self.color_fondo, pady=20)
-        self.tabla_frame.grid(row=5, column=0, columnspan=5, rowspan=3, sticky="ews")
+        self.tabla_frame.grid(row=5, column=0, columnspan=5, rowspan=3, sticky="ewn")
         
         
         opciones_frame = Frame(self.root, background=self.color_fondo, pady=10)
@@ -590,10 +590,10 @@ class Resumen:
         #{lista_configuracion[1]}
         #{lista_configuracion[2]}""")
         lista_configuracion
-        Label(self.tabla_frame, text="Índice", font=("Verdana", 12), background=self.color_fondo).grid(row=0, column=0)
-        Label(self.tabla_frame, text="Imagen", font=("Verdana", 12), background=self.color_fondo).grid(row=0, column=1)
-        Label(self.tabla_frame, text="Efecto", font=("Verdana", 12), background=self.color_fondo).grid(row=0, column=2)
-        Label(self.tabla_frame, text="Tiempo", font=("Verdana", 12), background=self.color_fondo).grid(row=0, column=3)
+        Label(self.tabla_frame, text="Índice", font=("Verdana", 14, 'bold'), background=self.color_fondo).grid(row=0, column=0)
+        Label(self.tabla_frame, text="Imagen", font=("Verdana", 14, 'bold'), background=self.color_fondo).grid(row=0, column=1)
+        Label(self.tabla_frame, text="Efecto", font=("Verdana", 14, 'bold'), background=self.color_fondo).grid(row=0, column=2)
+        Label(self.tabla_frame, text="Tiempo", font=("Verdana", 14, 'bold'), background=self.color_fondo).grid(row=0, column=3)
         for i, item in enumerate(lista_configuracion):
             indice = i + 1
             imagen = item.get_imagen()
@@ -611,6 +611,11 @@ class Resumen:
             Label(self.tabla_frame, text=efecto, font=("Verdana", 12), background=self.color_fondo).grid(column=2, row=i+1)
             Label(self.tabla_frame, text=tiempo, font=("Verdana", 12), background=self.color_fondo).grid(column=3, row=i+1)
             #pass
+            
+            self.tabla_frame.grid_columnconfigure(0, weight=1)
+            self.tabla_frame.grid_columnconfigure(1, weight=1)
+            self.tabla_frame.grid_columnconfigure(2, weight=1)
+            self.tabla_frame.grid_columnconfigure(3, weight=1)
             
             
             
@@ -929,8 +934,6 @@ class Visualizar:
 ########################Termina Visualizar#################################
 
 
-
-
 ########################Main###########################
 
 lista_configuracion = []
@@ -941,7 +944,6 @@ datos3 = Datos(2, './recursos/electronica.jpg', 'IzqDer.py', 51)
 lista_configuracion.append(datos1)
 lista_configuracion.append(datos2)
 lista_configuracion.append(datos3)
-
 
 #bienvenida = Bienvenida()
 #bienvenida.cargar()
