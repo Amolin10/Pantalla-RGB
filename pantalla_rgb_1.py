@@ -459,6 +459,7 @@ class Configuracion:
         self.destruir()
         resumen = Resumen()
         resumen.cargar()
+        resumen.llenar_tabla()
         resumen.mostrar()
 
     def limpiar_configuracion(self):
@@ -484,14 +485,15 @@ class Resumen:
         self.root = "Tk()"
         self.color_fondo = '#E2EFFF'
         self.tabla_frame = ''
+        self.color_fondo_tabla = '#C0D5F0'
 
     def cargar(self):
         self.root = Tk()
         self.root.title(self.title)
         icono = os.path.abspath(self.icon)
         self.root.iconbitmap(icono)
-        ancho = 1000
-        alto = 650
+        ancho = 1150
+        alto = 800
         xVentana = self.root.winfo_screenwidth() // 2 - ancho // 2 #winfo da el tamaño de la pantalla en ancho y en alto
         yVentana = self.root.winfo_screenheight() // 2 - alto // 2
         posicion = str(ancho) + "x" + str(alto) + "+" + str(xVentana)+ "+" + str(yVentana)
@@ -528,10 +530,11 @@ class Resumen:
         texto = Label(self.root, text="Resumen de la configuración", relief='groove',font=("Verdana", 22), background='#2980B9')
         texto.grid(row=2, column=0, columnspan=5, sticky="ewns")
         Label(self.root, text="", background=self.color_fondo).grid(row=3, column=0, columnspan=5, pady=5)
-        ttk.Separator(self.root, orient=HORIZONTAL).grid(row=4, column=0, columnspan=5, sticky="ews")
         
-        self.tabla_frame = Frame(self.root, background=self.color_fondo, pady=20)
-        self.tabla_frame.grid(row=5, column=0, columnspan=5, rowspan=3, sticky="ewn")
+        #ttk.Separator(self.root, orient=HORIZONTAL).grid(row=4, column=0, columnspan=5, sticky="ews")
+        
+        self.tabla_frame = Frame(self.root, background=self.color_fondo_tabla, pady=20)
+        self.tabla_frame.grid(row=5, column=0, columnspan=5, rowspan=2, sticky="nsew")
         
         
         opciones_frame = Frame(self.root, background=self.color_fondo, pady=10)
@@ -571,7 +574,7 @@ class Resumen:
         #self.root.grid_columnconfigure(2, weight=1)
         self.root.grid_columnconfigure(3, weight=1)
         self.root.grid_columnconfigure(4, weight=1)
-        self.root.grid_rowconfigure(6,weight=1)
+        self.root.grid_rowconfigure(6, weight=1)
     
     def destruir(self):
         self.root.destroy()
@@ -589,11 +592,30 @@ class Resumen:
         #print(f"""{lista_configuracion[0]}
         #{lista_configuracion[1]}
         #{lista_configuracion[2]}""")
-        lista_configuracion
-        Label(self.tabla_frame, text="Índice", font=("Verdana", 14, 'bold'), background=self.color_fondo).grid(row=0, column=0)
-        Label(self.tabla_frame, text="Imagen", font=("Verdana", 14, 'bold'), background=self.color_fondo).grid(row=0, column=1)
-        Label(self.tabla_frame, text="Efecto", font=("Verdana", 14, 'bold'), background=self.color_fondo).grid(row=0, column=2)
-        Label(self.tabla_frame, text="Tiempo", font=("Verdana", 14, 'bold'), background=self.color_fondo).grid(row=0, column=3)
+        
+        canvas = Canvas(self.tabla_frame, bg=self.color_fondo_tabla)
+        canvas.pack(side=LEFT, fill=BOTH, expand=1)
+        #canvas.grid(column=0, row=0, sticky="ew")
+        vsbar = Scrollbar(self.tabla_frame, orient=VERTICAL, command=canvas.yview) 
+        vsbar.pack(side=RIGHT, fill=Y)
+        #vsbar.grid(column=1, row=0, sticky='ns')
+        canvas.configure(yscrollcommand=vsbar.set)
+        canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion= canvas.bbox("all")))
+        
+        contenedor_canvas = Frame(canvas, background=self.color_fondo_tabla, padx=150)   
+        canvas.create_window((0,0), window=contenedor_canvas)
+        #contenedor_canvas.grid(column=0, row=0)
+    
+    
+        ttk.Separator(contenedor_canvas, orient=HORIZONTAL).grid(row=0, column=1, columnspan=4, sticky="ews")
+        Label(contenedor_canvas, text="Índice", font=("Verdana", 14, 'bold'), background=self.color_fondo_tabla, padx=65).grid(row=1, column=1, pady=10)
+        Label(contenedor_canvas, text="Imagen", font=("Verdana", 14, 'bold'), background=self.color_fondo_tabla, padx=65).grid(row=1, column=2, pady=10)
+        Label(contenedor_canvas, text="Efecto", font=("Verdana", 14, 'bold'), background=self.color_fondo_tabla, padx=65).grid(row=1, column=3, pady=10)
+        Label(contenedor_canvas, text="Tiempo", font=("Verdana", 14, 'bold'), background=self.color_fondo_tabla, padx=65).grid(row=1, column=4, pady=10)
+        ttk.Separator(contenedor_canvas, orient=HORIZONTAL).grid(row=2, column=1, columnspan=4, sticky="ews")
+        ttk.Separator(contenedor_canvas, orient=VERTICAL).grid(row=1, column=0, sticky="nse", rowspan=2)
+        ttk.Separator(contenedor_canvas, orient=VERTICAL).grid(row=1, column=5, sticky="nsw", rowspan=2)
+        filas = 2
         for i, item in enumerate(lista_configuracion):
             indice = i + 1
             imagen = item.get_imagen()
@@ -604,18 +626,26 @@ class Resumen:
             imagen_muestra = imagen_muestra.resize((110,50))
             imagen_muestra = ImageTk.PhotoImage(imagen_muestra)
             #print(f'{indice}  {imagen}  {efecto} {tiempo}')
-            Label(self.tabla_frame, text=indice, font=("Verdana", 12), background=self.color_fondo).grid(column=0, row=i+1)
-            imagen_label = Label(self.tabla_frame, image=imagen_muestra, width=110, height=50, background=self.color_fondo)
-            imagen_label.grid(column=1, row=i+1)
+            Label(contenedor_canvas, text=indice, font=("Verdana", 12), background=self.color_fondo_tabla).grid(column=1, row=indice+filas)
+            imagen_label = Label(contenedor_canvas, image=imagen_muestra, width=110, height=50, background=self.color_fondo_tabla)
+            imagen_label.grid(column=2, row=indice+filas)
             imagen_label.image = imagen_muestra
-            Label(self.tabla_frame, text=efecto, font=("Verdana", 12), background=self.color_fondo).grid(column=2, row=i+1)
-            Label(self.tabla_frame, text=tiempo, font=("Verdana", 12), background=self.color_fondo).grid(column=3, row=i+1)
-            #pass
+            Label(contenedor_canvas, text=efecto, font=("Verdana", 12), background=self.color_fondo_tabla).grid(column=3, row=indice+filas)
+            Label(contenedor_canvas, text=tiempo, font=("Verdana", 12), background=self.color_fondo_tabla).grid(column=4, row=indice+filas)
             
-            self.tabla_frame.grid_columnconfigure(0, weight=1)
-            self.tabla_frame.grid_columnconfigure(1, weight=1)
-            self.tabla_frame.grid_columnconfigure(2, weight=1)
-            self.tabla_frame.grid_columnconfigure(3, weight=1)
+            ttk.Separator(contenedor_canvas, orient=VERTICAL).grid(row=indice+filas, column=0, sticky="nse", rowspan=2)
+            ttk.Separator(contenedor_canvas, orient=VERTICAL).grid(row=indice+filas, column=5, sticky="nsw", rowspan=2)
+            ttk.Separator(contenedor_canvas, orient=HORIZONTAL).grid(row=indice+filas+1, column=1, columnspan=4, sticky="ews")
+            filas = filas + 1
+            #pass
+            contenedor_canvas.grid_columnconfigure(0, weight=1)
+            contenedor_canvas.grid_columnconfigure(1, weight=1)
+            contenedor_canvas.grid_columnconfigure(2, weight=1)
+            contenedor_canvas.grid_columnconfigure(3, weight=1)
+            contenedor_canvas.grid_columnconfigure(4, weight=1)
+            contenedor_canvas.grid_columnconfigure(5, weight=1)
+            
+            
             
             
             
@@ -940,7 +970,18 @@ lista_configuracion = []
 datos1 = Datos(0, './recursos/micro.jpg', 'Aleatorio.py', 61)
 datos2 = Datos(1, './recursos/RGB.jpg', 'Derecha a Izquierda.py', 40)
 datos3 = Datos(2, './recursos/electronica.jpg', 'IzqDer.py', 51)
-
+lista_configuracion.append(datos1)
+lista_configuracion.append(datos2)
+lista_configuracion.append(datos3)
+lista_configuracion.append(datos1)
+lista_configuracion.append(datos2)
+lista_configuracion.append(datos3)
+lista_configuracion.append(datos1)
+lista_configuracion.append(datos2)
+lista_configuracion.append(datos3)
+lista_configuracion.append(datos1)
+lista_configuracion.append(datos2)
+lista_configuracion.append(datos3)
 lista_configuracion.append(datos1)
 lista_configuracion.append(datos2)
 lista_configuracion.append(datos3)
@@ -960,6 +1001,4 @@ resumen.cargar()
 resumen.llenar_tabla()
 
 resumen.mostrar()
-
-#resumen.llenar_tabla()
-
+resumen.llenar_tabla()
