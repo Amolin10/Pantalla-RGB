@@ -7,7 +7,6 @@ from opciones import Opciones
 from tkinter import messagebox
 from tkinter import filedialog
 from datos import Datos
-
     
 from pygame import * 
 import sys, pygame
@@ -326,16 +325,16 @@ class Configuracion:
         self.minutos = StringVar()
         #self.minutos.set('0')
         
-        Label(tiempo, text="minutos:", font=("verdana", 14), background=self.colorFondo).grid(column=0, row=1, sticky="w")
-        minutosBox = ttk.Spinbox(tiempo, from_=0, to=4, increment=1, state="readonly", font=("verdana", 14), textvariable=self.minutos)
-        minutosBox.grid(column=0, row=2, sticky='wn', pady=5)
+        Label(tiempo, text="minutos:", font=("verdana", 14), background=self.colorFondo).grid(column=0, row=1, sticky="we")
+        minutosBox = ttk.Spinbox(tiempo, from_=0, to=4, increment=1, state="readonly", width=4, font=("verdana", 14), textvariable=self.minutos)
+        minutosBox.grid(column=0, row=2, sticky='n', pady=5)
         
         self.segundos = StringVar()
         #self.segundos.set('0')
         
-        Label(tiempo, text="segundos:", font=("verdana", 14), background=self.colorFondo).grid(column=1, row=1, sticky="w")
-        segundosBox = ttk.Spinbox(tiempo, from_=0, to=59, increment=1, state="readonly", font=("verdana", 14), textvariable=self.segundos)
-        segundosBox.grid(column=1, row=2, sticky='wn', pady=5)
+        Label(tiempo, text="segundos:", font=("verdana", 14), background=self.colorFondo).grid(column=1, row=1, sticky="we")
+        segundosBox = ttk.Spinbox(tiempo, from_=0, to=59, increment=1, state="readonly", width=4, font=("verdana", 14), textvariable=self.segundos)
+        segundosBox.grid(column=1, row=2, sticky='n', pady=5)
         # Label(tiempo, text="", background="white").grid(column=0, row=3, columnspan=3)
         tiempo.grid(row=8, column=3, columnspan=2, rowspan=2, sticky="ns")
         tiempo.grid_rowconfigure(0, weight=1)
@@ -353,7 +352,7 @@ class Configuracion:
         imgAgregar = Image.open("./iconos/imagen.png")
         imgAgregar = imgAgregar.resize((30, 30))
         imgAgregar = ImageTk.PhotoImage(imgAgregar)
-        botonAgregar = Button(self.root, text="Agregar otra imagen  ", image=imgAgregar, compound="right",
+        botonAgregar = Button(self.root, text="Agregar imagen  ", image=imgAgregar, compound="right",
                               font=("verdana", 14), command=self.agregar)
         botonAgregar.grid(column=1, row=11, pady=15, sticky='n')
         botonAgregar.image = imgAgregar
@@ -388,21 +387,6 @@ class Configuracion:
         self.root.grid_rowconfigure(5, weight=1)
         self.root.grid_rowconfigure(8, weight=1)
         # self.root.grid_rowconfigure(9,weight=1)
-
-    def selecImagenX(self, imagenFrame):
-        archivo = filedialog.askopenfilename(filetypes=[('Archivos de imagen', '*.jpg *.png *.jpeg *.ppm')])
-
-        if archivo is not None:
-            # Imagen de entrada
-            imagenEntrada = Image.open(archivo)
-            ancho, alto = imagenEntrada.size
-            imagenEntrada = imagenEntrada.resize((640, 240))  # 128x48
-            ImagenEntrada = ImageTk.PhotoImage(imagenEntrada)
-            imagenOriginal = Label(imagenFrame, image=ImagenEntrada)
-            imagenOriginal.image = ImagenEntrada
-            imagenOriginal.grid(column=0, row=2, sticky=N)
-            imagenOriginal.config(relief="solid")
-            self.imagen_ruta = archivo
     
     def selecImagen(self, imagenFrame):
         archivo = filedialog.askopenfilename(filetypes=[('Archivos de imagen', '*.jpg *.png *.jpeg *.ppm')])
@@ -422,12 +406,11 @@ class Configuracion:
 
     def cargarMenus(self):
         miMenu = Menu(self.root)
-
         miMenu.add_command(label="Ayuda", command=ventanaAyuda)
         miMenu.add_command(label="Acerca de", command=self.informacion)
 
     def informacion(self):
-        messagebox.showinfo("Acerca de", "Interfaz para configurar tablero RGB.\n\nVersión: ......")
+        messagebox.showinfo("Pantalla RGB", "Acerca de.\nInterfaz para configurar tablero RGB.\n\nVersión: ......")
 
     def destruir(self):
         self.root.destroy()
@@ -436,18 +419,44 @@ class Configuracion:
         self.root.mainloop()
 
     def agregar(self):
-        tiempo = (int(self.minutos.get()) * 60) + int(self.segundos.get())
-        #print(f'Imagen: {self.imagen_ruta}\n Efecto: {self.opcion_efecto.get()}\n Tiempo: {tiempo}')
-        datos = Datos(len(lista_configuracion), self.imagen_ruta, self.opcion_efecto.get(), tiempo)
-        lista_configuracion.append(datos)
-        print(lista_configuracion)
-        self.limpiar_configuracion()
-
+        if (self.imagen_ruta == '' or self.opcion_efecto.get() == 'None' or self.minutos.get() == '' or self.segundos.get() == ''):
+            messagebox.showwarning("Pantalla RGB", "Debe llenar todos los campos.")
+        else:
+            tiempo = (int(self.minutos.get()) * 60) + int(self.segundos.get())
+            print(f'Imagen: {self.imagen_ruta}\n Efecto: {self.opcion_efecto.get()}\n Tiempo: {tiempo}')
+            datos = Datos(len(lista_configuracion), self.imagen_ruta, self.opcion_efecto.get(), tiempo)
+            lista_configuracion.append(datos)
+            #print(lista_configuracion)
+            self.limpiar_configuracion()
+    
+    def nombre_efecto(self, nombre):
+        if (nombre == 'Instantaneo'):
+            return 'Instantaneo.py'
+        elif (nombre == 'De abajo a arriba'):
+            return 'AbajoArriba.py'
+        elif (nombre == 'Aleatorio'):
+            return 'Aleatorio.py'
+        elif (nombre == 'De derecha a izquierda'):
+            return 'DerechaIzquierda.py'
+        elif (nombre == 'De arriba a abajo'):
+            return 'ArribaAbajo.py'
+    
     def regresar(self):
-        self.destruir()
-        opciones = Opciones()
-        opciones.cargar()
-        opciones.mostrar()
+        if len(lista_configuracion) > 0:
+            decision = messagebox.askokcancel("Pantalla RGB", "Todos los cambios realizados serán borrados.")
+            if(decision == True):
+                self.destruir()
+                lista_configuracion.clear()
+                print(len(lista_configuracion))
+                opciones = Opciones()
+                opciones.cargar()
+                opciones.mostrar()
+                
+        else:
+            self.destruir()
+            opciones = Opciones()
+            opciones.cargar()
+            opciones.mostrar()
 
 
     def visualizar(self):
@@ -456,11 +465,14 @@ class Configuracion:
         pass
 
     def terminar(self):
-        self.destruir()
-        resumen = Resumen()
-        resumen.cargar()
-        resumen.llenar_tabla()
-        resumen.mostrar()
+        if len(lista_configuracion) == 0:
+            messagebox.showwarning("Pantalla RGB", "La lista de configuración está vacía. \n Por favor inserte una configuración.")
+        else:
+            self.destruir()
+            resumen = Resumen()
+            resumen.cargar()
+            resumen.llenar_tabla()
+            resumen.mostrar()
 
     def limpiar_configuracion(self):
         self.imagen_ruta = ''
@@ -535,12 +547,17 @@ class Resumen:
         
         self.tabla_frame = Frame(self.root, background=self.color_fondo_tabla, pady=20)
         self.tabla_frame.grid(row=5, column=0, columnspan=5, rowspan=2, sticky="nsew")
-        
-        
         opciones_frame = Frame(self.root, background=self.color_fondo, pady=10)
         opcion_editar = StringVar()
-        opcion_entry = Entry(opciones_frame, textvariable=opcion_editar, font=("Verdana", 12), width=10)
-        opcion_entry.grid(column=0, row=0, sticky="e", padx=10, ipady=4)
+        opcion_editar.set(1)
+        
+        tam_lista = len(lista_configuracion)
+        imagen_box = ttk.Spinbox(opciones_frame, from_=1, to=tam_lista, increment=1, state="readonly", width=4, font=("verdana", 12), textvariable=opcion_editar)
+        imagen_box.grid(column=0, row=0, sticky="e", padx=10, ipady=4)
+        
+        #opcion_entry = Entry(opciones_frame, textvariable=opcion_editar, font=("Verdana", 12), width=10)
+        #opcion_entry.grid(column=0, row=0, sticky="e", padx=10, ipady=4)
+        
         Button(opciones_frame, text="Editar", font=("Verdana", 12), command=lambda: self.editar_opcion(opcion_editar.get())).grid(column=1, row=0, ipadx=10, sticky='w', padx=10)
         Label(opciones_frame, text= "Seleccione una imagen para editar", font=("Verdana", 12), background=self.color_fondo).grid(column=0, row=1, columnspan=2, pady=5)
         Button(opciones_frame, text="Visualizar\nConfiguración", font=("Verdana", 12), command=self.visualizar).grid(ipadx=10, column=3, row=0, rowspan=2, sticky='nes')
@@ -564,7 +581,7 @@ class Resumen:
         imgSave=Image.open("./iconos/save.ico")
         imgSave = imgSave.resize((30, 30))
         imgSave = ImageTk.PhotoImage(imgSave)
-        botonSave = Button(self.root, image=imgSave, text="Guardar   ", compound="right", font=("Verdana", 12), activebackground="#999999")
+        botonSave = Button(self.root, image=imgSave, text="Guardar   ", compound="right", font=("Verdana", 12), activebackground="#999999", command=self.guardar_configuracion)
         botonSave.grid(row=9, column=4, ipadx=20, padx=15, pady=15, sticky="ws")
         botonSave.image = imgSave
 
@@ -583,8 +600,12 @@ class Resumen:
         self.root.mainloop()
         
     def editar_opcion(self, opcion_numero):
-        pass
-    
+        self.destruir()
+        configuracion_resumen = ConfiguracionResumen()
+        configuracion_resumen.cargar()
+        configuracion_resumen.llenar_configuracion(int(opcion_numero))
+        configuracion_resumen.mostrar()
+        
     def visualizar(self):
         pass
     
@@ -604,12 +625,11 @@ class Resumen:
         
         contenedor_canvas = Frame(canvas, background=self.color_fondo_tabla, padx=150)   
         canvas.create_window((0,0), window=contenedor_canvas)
-        #contenedor_canvas.grid(column=0, row=0)
-    
+        #contenedor_canvas.grid(column=0, row=0) 
     
         ttk.Separator(contenedor_canvas, orient=HORIZONTAL).grid(row=0, column=1, columnspan=4, sticky="ews")
-        Label(contenedor_canvas, text="Índice", font=("Verdana", 14, 'bold'), background=self.color_fondo_tabla, padx=65).grid(row=1, column=1, pady=10)
-        Label(contenedor_canvas, text="Imagen", font=("Verdana", 14, 'bold'), background=self.color_fondo_tabla, padx=65).grid(row=1, column=2, pady=10)
+        Label(contenedor_canvas, text="Imagen", font=("Verdana", 14, 'bold'), background=self.color_fondo_tabla, padx=65).grid(row=1, column=1, pady=10)
+        Label(contenedor_canvas, text="Vista", font=("Verdana", 14, 'bold'), background=self.color_fondo_tabla, padx=65).grid(row=1, column=2, pady=10)
         Label(contenedor_canvas, text="Efecto", font=("Verdana", 14, 'bold'), background=self.color_fondo_tabla, padx=65).grid(row=1, column=3, pady=10)
         Label(contenedor_canvas, text="Tiempo", font=("Verdana", 14, 'bold'), background=self.color_fondo_tabla, padx=65).grid(row=1, column=4, pady=10)
         ttk.Separator(contenedor_canvas, orient=HORIZONTAL).grid(row=2, column=1, columnspan=4, sticky="ews")
@@ -619,8 +639,8 @@ class Resumen:
         for i, item in enumerate(lista_configuracion):
             indice = i + 1
             imagen = item.get_imagen()
-            efecto = item.get_efecto()
-            tiempo = item.get_tiempo()
+            efecto = self.nombre_efecto(item.get_efecto())
+            tiempo = self.tiempo_formato(item.get_tiempo())
             
             imagen_muestra = Image.open(imagen) 
             imagen_muestra = imagen_muestra.resize((110,50))
@@ -645,22 +665,63 @@ class Resumen:
             contenedor_canvas.grid_columnconfigure(4, weight=1)
             contenedor_canvas.grid_columnconfigure(5, weight=1)
             
+    def nombre_efecto(self, nombre):
+        if (nombre == 'Instantaneo.py'):
+            return 'Instantaneo'
+        elif (nombre == 'AbajoArriba.py'):
+            return 'De abajo a arriba'
+        elif (nombre == 'Aleatorio.py'):
+            return 'Aleatorio'
+        elif (nombre == 'DerechaIzquierda.py'):
+            return 'De derecha a izquierda'
+        elif (nombre == 'ArribaAbajo.py'):
+            return 'De arriba a abajo'
+        
+    def tiempo_formato(self, tiempo):
+        minutos = int(tiempo / 60)
+        segundos = tiempo % 60
+        #print('{:02}:{:02}'.format(minutos, segundos), end='\n')
+        return '{:02}:{:02} minutos'.format(minutos, segundos)
+        
+        
+    def guardar_configuracion(self):
+        ruta_guardar = filedialog.askdirectory()
+        print(ruta_guardar)
+        indice = lista_configuracion[0].get_numero()
+        imagen = lista_configuracion[0].get_imagen()
+        efecto = lista_configuracion[0].get_efecto()
+        tiempo = lista_configuracion[0].get_tiempo()
+        
+        nombre_imagen = ''
+        for i in range(len(imagen)):
+            if(imagen[-i] == '/'):
+                nombre_imagen = imagen[-i+1:]
+                print(nombre_imagen)
+                break
+        
             
-            
-            
-            
+        #cv2.imwrite(f'{ruta_guardar}{nombre_imagen}.ppm', img)
+                   
 ########################Termina Resumen#################################
 
 
 ########################Configuracion Resumen#################################
 class ConfiguracionResumen:
-    
     def __init__(self):
+        self.imagen_ruta = ''
+        self.label_imagen = ''
+        self.imagenFrame = 0
+        self.opcion_efecto = None
+        self.minutos = 0
+        self.segundos = 0
+        self.numero_imagen_editar = 0
+        
         self.title = "Letrero RGB"
         self.icon = "./iconos/firefly.ico"
         self.resizable = True
         self.root = "Tk()"
         self.colorFondo = '#E2EFFF'
+        
 
     def cargar(self):
         self.root = Tk()
@@ -674,6 +735,7 @@ class ConfiguracionResumen:
         posicion = str(ancho) + "x" + str(alto) + "+" + str(xVentana) + "+" + str(yVentana)
         self.root.geometry(posicion)
         self.root.config(background=self.colorFondo)
+
 
         if self.resizable:
             self.root.resizable(1, 1)
@@ -713,40 +775,43 @@ class ConfiguracionResumen:
         ttk.Separator(self.root, orient=HORIZONTAL).grid(row=7, column=3, columnspan=2, sticky="ewn")
         ttk.Separator(self.root, orient=HORIZONTAL).grid(row=10, column=0, columnspan=5, sticky="ewn")
 
-        imagenFrame = Frame(self.root, background=self.colorFondo, pady=10)
-        Label(imagenFrame, text="Selecciona una imagen para\nmostrar en la pantalla RGB", font=("verdana", 18), padx=10,
+        self.imagenFrame = Frame(self.root, background=self.colorFondo, pady=10)
+        Label(self.imagenFrame, text="Selecciona una imagen para\nmostrar en la pantalla RGB", font=("verdana", 18), padx=10,
               background=self.colorFondo).grid(row=0, column=0, sticky="n")
+        #self.label_imagen = Label(imagenFrame, background=self.colorFondo)
+        #self.label_imagen.grid(column=0, row=2, sticky=N)
+        
         imgImagen = Image.open("./iconos/imagen.png")
         imgImagen = imgImagen.resize((30, 30))
         imgImagen = ImageTk.PhotoImage(imgImagen)
-        botonCargar = Button(imagenFrame, text="Cargar imagen   ", image=imgImagen, compound="right",
-                             font=("verdana", 14), command=lambda: self.selecImagen(imagenFrame))
+        botonCargar = Button(self.imagenFrame, text="Cargar imagen   ", image=imgImagen, compound="right",
+                             font=("verdana", 14), command=lambda: self.selecImagen(self.imagenFrame))
         botonCargar.grid(row=1, column=0, pady=30)
         botonCargar.image = imgImagen
 
-        Label(imagenFrame, height=16, width=100, background=self.colorFondo).grid(column=0, row=2, sticky=N)
+        Label(self.imagenFrame, height=16, width=100, background=self.colorFondo).grid(column=0, row=2, sticky=N)
 
-        imagenFrame.grid_columnconfigure(0, weight=1)
+        self.imagenFrame.grid_columnconfigure(0, weight=1)
         # imagenFrame.rowconfigure(0, weight=1)
-        imagenFrame.rowconfigure(1, weight=1)
-        imagenFrame.rowconfigure(2, weight=1)
-        imagenFrame.grid(row=6, column=0, columnspan=2, rowspan=5, sticky="ns", pady=20)
+        self.imagenFrame.rowconfigure(1, weight=1)
+        self.imagenFrame.rowconfigure(2, weight=1)
+        self.imagenFrame.grid(row=6, column=0, columnspan=2, rowspan=5, sticky="ns", pady=20)
 
         parametros = Frame(self.root, background=self.colorFondo)
+       
         ########Poner una variable a los radiobutons##########################
-        Label(parametros, text="Selecciona el efecto de entrada de la imagen", font=("Verdana", 18),
-              background=self.colorFondo).grid(column=0, row=0, columnspan=3)
-        Radiobutton(parametros, text="Instantaneo", font=("verdana", 14), background=self.colorFondo).grid(column=0,
-                                                                                                           row=1, )
-        Radiobutton(parametros, text="De abajo a arriba", font=("verdana", 14), background=self.colorFondo,
-                    padx=20).grid(column=1, row=1, sticky="ew")
-        Radiobutton(parametros, text="Aleatorio", font=("verdana", 14), background=self.colorFondo).grid(column=2,
-                                                                                                         row=1,
-                                                                                                         sticky="e")
-        Radiobutton(parametros, text="De derecha a izquierda", font=("verdana", 14), background=self.colorFondo).grid(
-            column=0, row=2, sticky="e")
-        Radiobutton(parametros, text="De arriba a abajo", font=("verdana", 14), background=self.colorFondo).grid(
-            column=2, row=2, sticky="w")
+
+        self.opcion_efecto = StringVar()
+        self.opcion_efecto.set(None)
+
+        Label(parametros, text="Selecciona el efecto de entrada de la imagen", font=("Verdana", 18), background=self.colorFondo).grid(column=0, row=0, columnspan=3)
+        
+        Radiobutton(parametros, text="Instantaneo", font=("verdana", 14), variable=self.opcion_efecto, value='Instantaneo.py', background=self.colorFondo).grid(column=0, row=1)
+        Radiobutton(parametros, text="De abajo a arriba", font=("verdana", 14), variable=self.opcion_efecto, value='AbajoArriba.py', background=self.colorFondo, padx=20).grid(column=1, row=1, sticky="ew")
+        Radiobutton(parametros, text="Aleatorio", font=("verdana", 14), variable=self.opcion_efecto, value='Aleatorio.py', background=self.colorFondo).grid(column=2, row=1, sticky="e")
+        Radiobutton(parametros, text="De derecha a izquierda", font=("verdana", 14), variable=self.opcion_efecto, value = 'DerechaIzquierda.py', background=self.colorFondo).grid(column=0, row=2, sticky="e")
+        Radiobutton(parametros, text="De arriba a abajo", font=("verdana", 14), variable=self.opcion_efecto, value='ArribaAbajo.py', background=self.colorFondo).grid(column=2, row=2, sticky="w")
+        
         Label(parametros, text="", background=self.colorFondo).grid(column=0, row=3, columnspan=3)
         parametros.rowconfigure(0, weight=1)
         parametros.rowconfigure(1, weight=1)
@@ -758,18 +823,42 @@ class ConfiguracionResumen:
         Label(tiempo, text="Seleccione el tiempo de desplegado de la imagen", font=("Verdana", 18), pady=14,
               background=self.colorFondo).grid(column=0, row=0, columnspan=2)
         
-        Label(tiempo, text="minutos:", font=("verdana", 14), background=self.colorFondo).grid(column=0, row=1,                                                                                      sticky="w")
-        minutosBox = ttk.Spinbox(tiempo, from_=0, to=4, increment=1, state="readonly", font=("verdana", 14))
-        minutosBox.grid(column=0, row=2, sticky='wn', pady=5)
+        self.minutos = StringVar()
+        #self.minutos.set('0')
         
-        Label(tiempo, text="segundos:", font=("verdana", 14), background=self.colorFondo).grid(column=1, row=1, sticky="w")
-        segundosBox = ttk.Spinbox(tiempo, from_=0, to=59, increment=1, state="readonly", font=("verdana", 14))
-        segundosBox.grid(column=1, row=2, sticky='wn', pady=5)
+        Label(tiempo, text="minutos:", font=("verdana", 14), background=self.colorFondo).grid(column=0, row=1, sticky="we")
+        minutosBox = ttk.Spinbox(tiempo, from_=0, to=4, increment=1, state="readonly", width=4, font=("verdana", 14), textvariable=self.minutos)
+        minutosBox.grid(column=0, row=2, sticky='n', pady=5)
+        
+        self.segundos = StringVar()
+        #self.segundos.set('0')
+        
+        Label(tiempo, text="segundos:", font=("verdana", 14), background=self.colorFondo).grid(column=1, row=1, sticky="we")
+        segundosBox = ttk.Spinbox(tiempo, from_=0, to=59, increment=1, state="readonly", width=4, font=("verdana", 14), textvariable=self.segundos)
+        segundosBox.grid(column=1, row=2, sticky='n', pady=5)
         # Label(tiempo, text="", background="white").grid(column=0, row=3, columnspan=3)
         tiempo.grid(row=8, column=3, columnspan=2, rowspan=2, sticky="ns")
         tiempo.grid_rowconfigure(0, weight=1)
         tiempo.grid_rowconfigure(1, weight=1)
         tiempo.grid_rowconfigure(2, weight=1)
+
+        """
+        imgRegresar = Image.open("./iconos/regresar.png")
+        imgRegresar = imgRegresar.resize((30, 30))
+        imgRegresar = ImageTk.PhotoImage(imgRegresar)
+        botonRegresar = Button(self.root, text="Regresar  ", image=imgRegresar, compound="right", font=("verdana", 14),
+                               command=self.regresar)
+        botonRegresar.grid(column=0, row=11, pady=15, sticky='n')
+        botonRegresar.image = imgRegresar
+        """
+
+        imgAgregar = Image.open("./iconos/imagen.png")
+        imgAgregar = imgAgregar.resize((30, 30))
+        imgAgregar = ImageTk.PhotoImage(imgAgregar)
+        botonAgregar = Button(self.root, text="Guardar cambios ", image=imgAgregar, compound="right",
+                              font=("verdana", 14), command=self.guardar_cambios)
+        botonAgregar.grid(column=1, row=11, pady=15, sticky='n')
+        botonAgregar.image = imgAgregar
 
         imgVisualizar = Image.open("./iconos/visualizar.png")
         imgVisualizar = imgVisualizar.resize((30, 30))
@@ -782,7 +871,7 @@ class ConfiguracionResumen:
         imgTerminar = Image.open("./iconos/arrow.png")
         imgTerminar = imgTerminar.resize((30, 30))
         imgTerminar = ImageTk.PhotoImage(imgTerminar)
-        botonTerminar = Button(self.root, text="Resumen de la configuración  ", image=imgTerminar, compound="right", font=("verdana", 14),
+        botonTerminar = Button(self.root, text="Regresar al resumen  ", image=imgTerminar, compound="right", font=("verdana", 14),
                                command=self.terminar)
         botonTerminar.grid(column=4, row=11, pady=15, sticky='n')
         botonTerminar.image = imgTerminar
@@ -801,30 +890,30 @@ class ConfiguracionResumen:
         self.root.grid_rowconfigure(5, weight=1)
         self.root.grid_rowconfigure(8, weight=1)
         # self.root.grid_rowconfigure(9,weight=1)
-
+    
     def selecImagen(self, imagenFrame):
         archivo = filedialog.askopenfilename(filetypes=[('Archivos de imagen', '*.jpg *.png *.jpeg *.ppm')])
 
         if archivo is not None:
             # Imagen de entrada
             imagenEntrada = Image.open(archivo)
-            ancho, alto = imagenEntrada.size
             imagenEntrada = imagenEntrada.resize((640, 240))  # 128x48
             ImagenEntrada = ImageTk.PhotoImage(imagenEntrada)
-            imagenOriginal = Label(imagenFrame, image=ImagenEntrada)
-            imagenOriginal.image = ImagenEntrada
-            imagenOriginal.grid(column=0, row=2, sticky=N)
-            imagenOriginal.config(relief="solid")
+            self.label_imagen = Label(imagenFrame, background=self.colorFondo)
+            #imagenOriginal = Label(imagenFrame, image=ImagenEntrada)
+            self.label_imagen.config(image = ImagenEntrada)
+            self.label_imagen.image = ImagenEntrada
+            self.label_imagen.grid(column=0, row=2, sticky=N)
+            self.label_imagen.config(relief="solid")
+            self.imagen_ruta = archivo
 
     def cargarMenus(self):
-
         miMenu = Menu(self.root)
-
         miMenu.add_command(label="Ayuda", command=ventanaAyuda)
         miMenu.add_command(label="Acerca de", command=self.informacion)
 
     def informacion(self):
-        messagebox.showinfo("Acerca de", "Interfaz para configurar tablero RGB.\n\nVersión: ......")
+        messagebox.showinfo("Pantalla RGB", "Acerca de. \nInterfaz para configurar tablero RGB.\n\nVersión: ......")
 
     def destruir(self):
         self.root.destroy()
@@ -832,37 +921,72 @@ class ConfiguracionResumen:
     def mostrar(self):
         self.root.mainloop()
 
-    def agregar(self):
-        print("Hola")
+    def guardar_cambios(self):
+        numero_imagen = self.numero_imagen_editar
+        tiempo = (int(self.minutos.get()) * 60) + int(self.segundos.get())
+        lista_configuracion[numero_imagen].set_imagen(self.imagen_ruta)
+        lista_configuracion[numero_imagen].set_efecto(self.opcion_efecto.get())
+        lista_configuracion[numero_imagen].set_tiempo(tiempo)
+        
+        #print(f'Imagen: {self.imagen_ruta}\n Efecto: {self.opcion_efecto}\n Tiempo: {tiempo}')
+        #lista_configuracion.append(datos)
+        #print(lista_configuracion)
+        #self.limpiar_configuracion()
+        messagebox.showinfo("Pantalla RGB", "Se han guardado los cambios con éxito")
+        
+    def set_imagen(self, archivo):
+        #archivo = filedialog.askopenfilename(filetypes=[('Archivos de imagen', '*.jpg *.png *.jpeg *.ppm')])
+        if archivo is not None:
+            # Imagen de entrada
+            imagenEntrada = Image.open(archivo)
+            imagenEntrada = imagenEntrada.resize((640, 240))  # 128x48
+            ImagenEntrada = ImageTk.PhotoImage(imagenEntrada)
+            self.label_imagen = Label(self.imagenFrame, background=self.colorFondo)
+            #imagenOriginal = Label(imagenFrame, image=ImagenEntrada)
+            self.label_imagen.config(image = ImagenEntrada)
+            self.label_imagen.image = ImagenEntrada
+            self.label_imagen.grid(column=0, row=2, sticky=N)
+            self.label_imagen.config(relief="solid")
+            self.imagen_ruta = archivo
 
-    def regresar(self):
-        self.destruir()
-        opciones = Opciones()
-        opciones.cargar()
-        opciones.mostrar()
+    def llenar_configuracion(self, numero_imagen):
+        self.numero_imagen_editar = numero_imagen - 1
+        datos_editar = lista_configuracion[self.numero_imagen_editar]
+        datos_numero = datos_editar.get_numero()
+        datos_imagen = datos_editar.get_imagen()
+        datos_efecto = datos_editar.get_efecto()
+        datos_tiempo = datos_editar.get_tiempo()
+        
+        minutos = int(datos_tiempo / 60)
+        segundos = datos_tiempo % 60
+        
+        self.set_imagen(datos_imagen)
+        self.opcion_efecto.set(datos_efecto)
+        self.minutos.set(minutos)
+        self.segundos.set(segundos)
+
 
     def visualizar(self):
-        #visualizar = Visualizar()
-        #visualizar.mostrar()  # Pantalla de visualizar
+        visualizar = Visualizar()
+        visualizar.mostrar()  # Pantalla de visualizar
         pass
 
     def terminar(self):
         self.destruir()
         resumen = Resumen()
         resumen.cargar()
+        resumen.llenar_tabla()
         resumen.mostrar()
 
-    def llenarListaMinutos(self):
-        lista = []
-        for i in range(5):
-            lista.append(str(i))
-        return lista
-
-    def llenarListaSegundos(self):
-        lista = []
-        for i in range(60):
-            lista.append(str(i))
-        return lista
+    def limpiar_configuracion(self):
+        self.imagen_ruta = ''
+        self.label_imagen.config(image = None)
+        self.label_imagen.config(relief="flat") 
+        self.label_imagen.image = None   
+        self.opcion_efecto.set(None)
+        self.minutos.set("")
+        self.segundos.set("")
+    
 ########################Termina Configuracion Resumen#################################
 
 
@@ -968,37 +1092,37 @@ class Visualizar:
 
 lista_configuracion = []
 datos1 = Datos(0, './recursos/micro.jpg', 'Aleatorio.py', 61)
-datos2 = Datos(1, './recursos/RGB.jpg', 'Derecha a Izquierda.py', 40)
-datos3 = Datos(2, './recursos/electronica.jpg', 'IzqDer.py', 51)
+datos2 = Datos(1, './recursos/RGB.jpg', 'DerechaIzquierda.py', 40)
+datos3 = Datos(2, './recursos/electronica.jpg', 'Instantaneo.py', 51)
+datos4 = Datos(3, './recursos/electronica.jpg', 'AbajoArriba.py', 122)
+datos5 = Datos(4, './recursos/electronica.jpg', 'ArribaAbajo.py', 179)
+
 lista_configuracion.append(datos1)
 lista_configuracion.append(datos2)
 lista_configuracion.append(datos3)
+lista_configuracion.append(datos4)
+lista_configuracion.append(datos5)
 lista_configuracion.append(datos1)
 lista_configuracion.append(datos2)
 lista_configuracion.append(datos3)
+lista_configuracion.append(datos4)
+lista_configuracion.append(datos5)
 lista_configuracion.append(datos1)
 lista_configuracion.append(datos2)
 lista_configuracion.append(datos3)
-lista_configuracion.append(datos1)
-lista_configuracion.append(datos2)
-lista_configuracion.append(datos3)
-lista_configuracion.append(datos1)
-lista_configuracion.append(datos2)
-lista_configuracion.append(datos3)
+lista_configuracion.append(datos4)
+lista_configuracion.append(datos5)
 
 #bienvenida = Bienvenida()
 #bienvenida.cargar()
-#bienvenida.mostrar()
+#bienvenida.mostrar()#
 
 #configuracion = Configuracion()
 #configuracion.cargar()
-#configuracion.mostrar()
+#configuracion.mostrar()#
 
 resumen = Resumen()
-
 resumen.cargar()
-
 resumen.llenar_tabla()
-
 resumen.mostrar()
-resumen.llenar_tabla()
+resumen.llenar_tabla()#
