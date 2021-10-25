@@ -699,8 +699,7 @@ class Resumen:
                 print(nombre_imagen)
                 break
         
-            
-        #cv2.imwrite(f'{ruta_guardar}{nombre_imagen}.ppm', img)
+        
                    
 ########################Termina Resumen#################################
 
