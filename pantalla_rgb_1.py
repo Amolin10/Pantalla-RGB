@@ -687,19 +687,42 @@ class Resumen:
     def guardar_configuracion(self):
         ruta_guardar = filedialog.askdirectory()
         print(ruta_guardar)
-        indice = lista_configuracion[0].get_numero()
-        imagen = lista_configuracion[0].get_imagen()
-        efecto = lista_configuracion[0].get_efecto()
-        tiempo = lista_configuracion[0].get_tiempo()
+        if not os.path.exists(f'{ruta_guardar}/Imagenes'):
+            os.mkdir(f'{ruta_guardar}/Imagenes')
+        archivo_configuracion = open (f'{ruta_guardar}/configuracion.txt','w')          
         
-        nombre_imagen = ''
+        configuracion_completa = ''
+        
+        for i in lista_configuracion:
+            indice = i.get_numero()
+            imagen_ruta =i.get_imagen()
+            efecto = i.get_efecto()
+            tiempo = i.get_tiempo()
+            
+            nombre_imagen = self.imagen_nombre(imagen_ruta)
+            
+            img = Image.open(imagen_ruta)
+            img.resize((128,48))
+            img.save(f'{ruta_guardar}/Imagenes/{nombre_imagen}.ppm')
+            
+            configuracion_datos = f'Datos{indice+1}\n{efecto}\n{nombre_imagen}.ppm\n{tiempo}\n'
+            configuracion_completa = configuracion_completa + configuracion_datos
+        
+        archivo_configuracion.write(configuracion_completa)
+        archivo_configuracion.close()
+        
+    def imagen_nombre(self, imagen):
         for i in range(len(imagen)):
             if(imagen[-i] == '/'):
                 nombre_imagen = imagen[-i+1:]
-                print(nombre_imagen)
                 break
+        for i in range(len(nombre_imagen)):
+            if(nombre_imagen[-i] == '.'):
+                nombre_imagen = nombre_imagen[:-i]
+                print(nombre_imagen)
+                break    
         
-        
+        return nombre_imagen
                    
 ########################Termina Resumen#################################
 
@@ -1090,38 +1113,38 @@ class Visualizar:
 ########################Main###########################
 
 lista_configuracion = []
-datos1 = Datos(0, './recursos/micro.jpg', 'Aleatorio.py', 61)
-datos2 = Datos(1, './recursos/RGB.jpg', 'DerechaIzquierda.py', 40)
-datos3 = Datos(2, './recursos/electronica.jpg', 'Instantaneo.py', 51)
-datos4 = Datos(3, './recursos/electronica.jpg', 'AbajoArriba.py', 122)
-datos5 = Datos(4, './recursos/electronica.jpg', 'ArribaAbajo.py', 179)
+#datos1 = Datos(0, './recursos/micro.jpg', 'Aleatorio.py', 61)
+#datos2 = Datos(1, './recursos/RGB.jpg', 'DerechaIzquierda.py', 40)
+#datos3 = Datos(2, './recursos/electronica.jpg', 'Instantaneo.py', 51)
+#datos4 = Datos(3, './recursos/electronica.jpg', 'AbajoArriba.py', 122)
+#datos5 = Datos(4, './recursos/electronica.jpg', 'ArribaAbajo.py', 179)
 
-lista_configuracion.append(datos1)
-lista_configuracion.append(datos2)
-lista_configuracion.append(datos3)
-lista_configuracion.append(datos4)
-lista_configuracion.append(datos5)
-lista_configuracion.append(datos1)
-lista_configuracion.append(datos2)
-lista_configuracion.append(datos3)
-lista_configuracion.append(datos4)
-lista_configuracion.append(datos5)
-lista_configuracion.append(datos1)
-lista_configuracion.append(datos2)
-lista_configuracion.append(datos3)
-lista_configuracion.append(datos4)
-lista_configuracion.append(datos5)
+#lista_configuracion.append(datos1)
+#lista_configuracion.append(datos2)
+#lista_configuracion.append(datos3)
+#lista_configuracion.append(datos4)
+#lista_configuracion.append(datos5)
+#lista_configuracion.append(datos1)
+#lista_configuracion.append(datos2)
+#lista_configuracion.append(datos3)
+#lista_configuracion.append(datos4)
+#lista_configuracion.append(datos5)
+#lista_configuracion.append(datos1)
+#lista_configuracion.append(datos2)
+#lista_configuracion.append(datos3)
+#lista_configuracion.append(datos4)
+#lista_configuracion.append(datos5)
 
-#bienvenida = Bienvenida()
-#bienvenida.cargar()
-#bienvenida.mostrar()#
+bienvenida = Bienvenida()
+bienvenida.cargar()
+bienvenida.mostrar()
 
 #configuracion = Configuracion()
 #configuracion.cargar()
 #configuracion.mostrar()#
 
-resumen = Resumen()
-resumen.cargar()
-resumen.llenar_tabla()
-resumen.mostrar()
-resumen.llenar_tabla()#
+#resumen = Resumen()
+#resumen.cargar()
+#resumen.llenar_tabla()
+#resumen.mostrar()
+#resumen.llenar_tabla()#

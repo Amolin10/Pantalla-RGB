@@ -1,0 +1,4 @@
+Datos1
+DerechaIzquierda.py
+uamazcL.ppm
+62
