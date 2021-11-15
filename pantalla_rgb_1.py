@@ -1,17 +1,55 @@
 from os import lseek
 import os.path
-from ayuda import *
+#from ayuda import *
 from tkinter import *
+from tkinter import ttk
 from PIL import Image, ImageTk
-from opciones import Opciones
+#from opciones import Opciones
 from tkinter import messagebox
 from tkinter import filedialog
-from datos import Datos
+#from datos import Datos
     
 from pygame import * 
 import sys, pygame
 from pygame.draw import line
 from pygame.font import SysFont
+
+############################ Datos #########################################
+class Datos:
+    
+    def __init__(self, numero, imagen, efecto, tiempo):
+        self.numero = numero
+        self.imagen = imagen
+        self.efecto = efecto
+        self.tiempo = tiempo
+        
+    def set_numero(self, numero):
+        self.numero = numero    
+
+    def get_numero(self):
+        return self.numero
+    
+    def set_imagen(self, imagen):
+        self.imagen = imagen
+    
+    def get_imagen(self):
+        return self.imagen
+    
+    def set_efecto(self, efecto):
+        self.efecto = efecto
+    
+    def get_efecto(self):
+        return self.efecto
+    
+    def set_tiempo(self, tiempo):
+        self.tiempo = tiempo 
+
+    def get_tiempo(self):
+        return self.tiempo
+    
+    def __repr__(self):
+        return str(self.__dict__)
+############################ Datos #########################################
 
 ############################# Bienvenida ####################################
 class Bienvenida:    
@@ -86,7 +124,7 @@ class Bienvenida:
         imgAyuda = Image.open("./iconos/interrogacion.png")
         imgAyuda = imgAyuda.resize((20, 20))
         imgAyuda = ImageTk.PhotoImage(imgAyuda)
-        botonAyuda = Button(fondo, image=imgAyuda, text="Ayuda  ", compound="right", command=ventanaAyuda)
+        botonAyuda = Button(fondo, image=imgAyuda, text="Ayuda  ", compound="right", command=""" ventanaAyuda """)
         botonAyuda.grid(row=4, column=0, ipadx=10)
         botonAyuda.image = imgAyuda
 
@@ -231,7 +269,6 @@ class Opciones:
         resumen.cargar()
         resumen.llenar_tabla()
         resumen.mostrar()    
-
 ########################Termina Opciones#####################################
 
 
@@ -435,7 +472,7 @@ class Configuracion:
 
     def cargarMenus(self):
         miMenu = Menu(self.root)
-        miMenu.add_command(label="Ayuda", command=ventanaAyuda)
+        miMenu.add_command(label="Ayuda", command=""" ventanaAyuda """)
         miMenu.add_command(label="Acerca de", command=self.informacion)
 
     def informacion(self):
@@ -518,8 +555,7 @@ class Configuracion:
         self.label_imagen.image = None   
         self.opcion_efecto.set(None)
         self.minutos.set("")
-        self.segundos.set("")
-    
+        self.segundos.set("") 
 ########################Termina Configuración################################# 
 
 
@@ -776,10 +812,7 @@ class Resumen:
             self.destruir()
             
     def on_closing(self):
-        self.salir()
-
-
-                   
+        self.salir()         
 ########################Termina Resumen#################################
 
 
@@ -987,7 +1020,7 @@ class ConfiguracionResumen:
 
     def cargarMenus(self):
         miMenu = Menu(self.root)
-        miMenu.add_command(label="Ayuda", command=ventanaAyuda)
+        miMenu.add_command(label="Ayuda", command=""" ventanaAyuda """)
         miMenu.add_command(label="Acerca de", command=self.informacion)
 
     def informacion(self):
@@ -1070,8 +1103,7 @@ class ConfiguracionResumen:
     def on_closing(self):
         decision = messagebox.askokcancel("Pantalla RGB", "Todos los cambios realizados serán borrados.")
         if(decision == True):
-            self.destruir()
-    
+            self.destruir()    
 ########################Termina Configuracion Resumen#################################
 
 
