@@ -157,7 +157,7 @@ class Opciones:
         imgConfig = imgConfig.resize((40, 40))
         imgConfig = ImageTk.PhotoImage(imgConfig)
         botonConfig = Button(self.root, image=imgConfig, text="Cargar configuración  ", width=350, compound="right",
-                             background='white', activebackground="#999999", font=("Verdana", 14))
+                             background='white', command=self.abrir_archivo, activebackground="#999999", font=("Verdana", 14))
         botonConfig.grid(row=1, column=0, padx=50, sticky="w")
         botonConfig.image = imgConfig
 
@@ -203,6 +203,35 @@ class Opciones:
         bienvenida = Bienvenida()
         bienvenida.cargar()
         bienvenida.mostrar()
+        
+        
+    def abrir_archivo(self): 
+        ruta_configuracion = filedialog.askdirectory()
+        archivo = open (f'{ruta_configuracion}/configuracion.txt','r')  
+        lineas_archivo = archivo.readlines()
+        archivo.close()
+        
+        for i in range(len(lineas_archivo)):
+            lineas_archivo[i] = lineas_archivo[i][:-1]
+        #print(len(lineas_archivo), lineas_archivo)
+       
+        for i in range(0, len(lineas_archivo), 4):
+            indice = lineas_archivo[i][5:]
+            efecto = lineas_archivo[i+1]
+            imagen = ruta_configuracion + '/Imagenes/' + lineas_archivo[i+2]
+            tiempo = lineas_archivo[i+3]
+            
+            datos_temp = Datos(indice, imagen, efecto, tiempo)
+            lista_configuracion.append(datos_temp)
+            
+        print(lista_configuracion)
+            
+        self.cerrar()
+        resumen = Resumen()
+        resumen.cargar()
+        resumen.llenar_tabla()
+        resumen.mostrar()    
+
 ########################Termina Opciones#####################################
 
 
@@ -416,6 +445,7 @@ class Configuracion:
         self.root.destroy()
 
     def mostrar(self):
+        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.root.mainloop()
 
     def agregar(self):
@@ -450,13 +480,20 @@ class Configuracion:
                 print(len(lista_configuracion))
                 opciones = Opciones()
                 opciones.cargar()
-                opciones.mostrar()
-                
+                opciones.mostrar()                
         else:
             self.destruir()
             opciones = Opciones()
             opciones.cargar()
             opciones.mostrar()
+        
+    def on_closing(self):
+        if len(lista_configuracion) > 0:
+            decision = messagebox.askokcancel("Pantalla RGB", "Todos los cambios realizados serán borrados.")
+            if(decision == True):
+                self.destruir()
+        else:   
+            self.destruir()
 
 
     def visualizar(self):
@@ -483,7 +520,6 @@ class Configuracion:
         self.minutos.set("")
         self.segundos.set("")
     
-    
 ########################Termina Configuración################################# 
 
 
@@ -498,6 +534,7 @@ class Resumen:
         self.color_fondo = '#E2EFFF'
         self.tabla_frame = ''
         self.color_fondo_tabla = '#C0D5F0'
+        self.estado_guardado = False
 
     def cargar(self):
         self.root = Tk()
@@ -574,7 +611,7 @@ class Resumen:
         imgSalir = Image.open("./iconos/quit.jpg")
         imgSalir = imgSalir.resize((30, 30))
         imgSalir = ImageTk.PhotoImage(imgSalir)
-        botonSalir = Button(self.root, image=imgSalir, text="Salir   ", compound="right", font=("Verdana", 12), activebackground="#999999")
+        botonSalir = Button(self.root, image=imgSalir, text="Salir   ", compound="right", font=("Verdana", 12), activebackground="#999999", command=self.salir)
         botonSalir.grid(row=9, column=0, ipadx=20, padx=15, pady=15, sticky="es")
         botonSalir.image = imgSalir
 
@@ -597,9 +634,11 @@ class Resumen:
         self.root.destroy()
 
     def mostrar(self):
+        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.root.mainloop()
         
     def editar_opcion(self, opcion_numero):
+        self.estado_guardado = False
         self.destruir()
         configuracion_resumen = ConfiguracionResumen()
         configuracion_resumen.cargar()
@@ -678,8 +717,8 @@ class Resumen:
             return 'De arriba a abajo'
         
     def tiempo_formato(self, tiempo):
-        minutos = int(tiempo / 60)
-        segundos = tiempo % 60
+        minutos = int(int(tiempo) / 60)
+        segundos = int(tiempo) % 60
         #print('{:02}:{:02}'.format(minutos, segundos), end='\n')
         return '{:02}:{:02} minutos'.format(minutos, segundos)
         
@@ -694,7 +733,7 @@ class Resumen:
         configuracion_completa = ''
         
         for i in lista_configuracion:
-            indice = i.get_numero()
+            indice = int(i.get_numero()) + 1
             imagen_ruta =i.get_imagen()
             efecto = i.get_efecto()
             tiempo = i.get_tiempo()
@@ -705,11 +744,15 @@ class Resumen:
             img.resize((128,48))
             img.save(f'{ruta_guardar}/Imagenes/{nombre_imagen}.ppm')
             
-            configuracion_datos = f'Datos{indice+1}\n{efecto}\n{nombre_imagen}.ppm\n{tiempo}\n'
+            print(type(str(indice)), type(str(tiempo)))
+            configuracion_datos = f'Datos{indice}\n{efecto}\n{nombre_imagen}.ppm\n{tiempo}\n'
             configuracion_completa = configuracion_completa + configuracion_datos
         
+        print(lista_configuracion)
         archivo_configuracion.write(configuracion_completa)
         archivo_configuracion.close()
+        messagebox.showinfo("Pantalla RGB", "Se han guardado la configuracion")
+        self.estado_guardado = True
         
     def imagen_nombre(self, imagen):
         for i in range(len(imagen)):
@@ -723,6 +766,19 @@ class Resumen:
                 break    
         
         return nombre_imagen
+
+    def salir(self):
+        if self.estado_guardado == False:
+            decision = messagebox.askokcancel("Pantalla RGB", "Está a punto de cerrar el programa.\n Todos los cambios realizados serán borrados.\n¿Desea continuar?")
+            if(decision == True):
+                self.destruir()
+        else:
+            self.destruir()
+            
+    def on_closing(self):
+        self.salir()
+
+
                    
 ########################Termina Resumen#################################
 
@@ -941,6 +997,7 @@ class ConfiguracionResumen:
         self.root.destroy()
 
     def mostrar(self):
+        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.root.mainloop()
 
     def guardar_cambios(self):
@@ -979,8 +1036,8 @@ class ConfiguracionResumen:
         datos_efecto = datos_editar.get_efecto()
         datos_tiempo = datos_editar.get_tiempo()
         
-        minutos = int(datos_tiempo / 60)
-        segundos = datos_tiempo % 60
+        minutos = int(int(datos_tiempo) / 60)
+        segundos = int(datos_tiempo) % 60
         
         self.set_imagen(datos_imagen)
         self.opcion_efecto.set(datos_efecto)
@@ -1003,11 +1060,17 @@ class ConfiguracionResumen:
     def limpiar_configuracion(self):
         self.imagen_ruta = ''
         self.label_imagen.config(image = None)
-        self.label_imagen.config(relief="flat") 
+        self.label_imagen.config(relief = "flat") 
         self.label_imagen.image = None   
         self.opcion_efecto.set(None)
         self.minutos.set("")
         self.segundos.set("")
+    
+    
+    def on_closing(self):
+        decision = messagebox.askokcancel("Pantalla RGB", "Todos los cambios realizados serán borrados.")
+        if(decision == True):
+            self.destruir()
     
 ########################Termina Configuracion Resumen#################################
 
@@ -1135,13 +1198,17 @@ lista_configuracion = []
 #lista_configuracion.append(datos4)
 #lista_configuracion.append(datos5)
 
+#opciones = Opciones()
+#opciones.cargar()
+#opciones.mostrar()
+
 bienvenida = Bienvenida()
 bienvenida.cargar()
 bienvenida.mostrar()
 
 #configuracion = Configuracion()
 #configuracion.cargar()
-#configuracion.mostrar()#
+#configuracion.mostrar()
 
 #resumen = Resumen()
 #resumen.cargar()
