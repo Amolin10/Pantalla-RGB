@@ -1,14 +1,14 @@
 from os import lseek
 import os.path
-#from ayuda import *
+
+#librerías para interfaces
 from tkinter import *
 from tkinter import ttk
 from PIL import Image, ImageTk
-#from opciones import Opciones
 from tkinter import messagebox
 from tkinter import filedialog
-#from datos import Datos
-    
+
+#Librerías para visualizaciones
 from pygame import * 
 import sys, pygame
 from pygame.draw import line
@@ -1206,44 +1206,11 @@ class Visualizar:
 
 
 ########################Main###########################
-
 lista_configuracion = []
-#datos1 = Datos(0, './recursos/micro.jpg', 'Aleatorio.py', 61)
-#datos2 = Datos(1, './recursos/RGB.jpg', 'DerechaIzquierda.py', 40)
-#datos3 = Datos(2, './recursos/electronica.jpg', 'Instantaneo.py', 51)
-#datos4 = Datos(3, './recursos/electronica.jpg', 'AbajoArriba.py', 122)
-#datos5 = Datos(4, './recursos/electronica.jpg', 'ArribaAbajo.py', 179)
+def main():    
+    bienvenida = Bienvenida()
+    bienvenida.cargar()
+    bienvenida.mostrar()
 
-#lista_configuracion.append(datos1)
-#lista_configuracion.append(datos2)
-#lista_configuracion.append(datos3)
-#lista_configuracion.append(datos4)
-#lista_configuracion.append(datos5)
-#lista_configuracion.append(datos1)
-#lista_configuracion.append(datos2)
-#lista_configuracion.append(datos3)
-#lista_configuracion.append(datos4)
-#lista_configuracion.append(datos5)
-#lista_configuracion.append(datos1)
-#lista_configuracion.append(datos2)
-#lista_configuracion.append(datos3)
-#lista_configuracion.append(datos4)
-#lista_configuracion.append(datos5)
-
-#opciones = Opciones()
-#opciones.cargar()
-#opciones.mostrar()
-
-bienvenida = Bienvenida()
-bienvenida.cargar()
-bienvenida.mostrar()
-
-#configuracion = Configuracion()
-#configuracion.cargar()
-#configuracion.mostrar()
-
-#resumen = Resumen()
-#resumen.cargar()
-#resumen.llenar_tabla()
-#resumen.mostrar()
-#resumen.llenar_tabla()#
+if __name__ == "__main__":
+    main()

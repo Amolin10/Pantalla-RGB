@@ -141,7 +141,7 @@ class Visualizar:
         efecto = presentacion_efecto
         
         if efecto == 'Aleatorio.py': #AbajoArriba  Instantaneo   ArribbaAbajo   DerechaIzquierda 
-            efecto_aleatorio = random.randint(1, 4)
+            ''' efecto_aleatorio = random.randint(1, 4)
             if(efecto_aleatorio == 1):
                 efecto = 'AbajoArriba.py'
             elif(efecto_aleatorio == 2):
@@ -150,7 +150,83 @@ class Visualizar:
                 efecto = 'ArribaAbajo.py'
             elif(efecto_aleatorio == 4):
                 efecto = 'DerechaIzquierda.py'
-            print(efecto)
+            print(efecto) '''
+            
+            # x = 60, 6 cuadros
+            # y = 35, 4 cuadros
+            cuadros_y = [0, 1, 2, 3]
+            cuadros_x = [0, 1, 2, 3, 4, 5]
+            x = 60
+            y = 35 
+            
+            cuadros_utilizados = []
+            for i in range(0, len(cuadros_y)*len(cuadros_x)):
+                self.ventana.blit(imagen, (720, 250))
+                while True:
+                    aleatorio_y = random.randint(0, len(cuadros_y) - 1)
+                    aleatorio_x = random.randint(0, len(cuadros_x) - 1)
+                    if not [aleatorio_y, aleatorio_x] in cuadros_utilizados:
+                        break 
+                cuadros_utilizados.append([aleatorio_y, aleatorio_x])
+                
+                
+            
+            # Meter 6 * 4 cuadros en un arreglo
+            #for i in range(0, 24):
+            #    self.ventana.blit(imagen, (720, 250))
+            #    aleatorio_y = random.randint(0, len(cuadros_y) - 1)
+            #    cuadros_y.pop(aleatorio_y)
+            #    aleatorio_x = random.randint(0, len(cuadros_x) - 1)
+            #    cuadros_x.pop(aleatorio_x)
+                ''' not (j == aleatorio_y and i == aleatorio_x) and '''
+                for i in range(0, 4):
+                    cord_y = 250 + y * i
+                    for j in range(0, 6):
+                        cord_x = 720 + x * j 
+                        if not ([i, j] in cuadros_utilizados):
+                            pygame.draw.rect(self.ventana, self.negro, Rect(cord_x, cord_y, x, y))
+                            
+                ticks_inicial = pygame.time.get_ticks()
+                ticks_final = ticks_inicial + 0.2 * 1000
+                while True:
+                    ticks_inicial = pygame.time.get_ticks()
+                    if ticks_inicial > ticks_final:
+                        break
+                    pygame.display.flip()
+                    
+            # Mostrar todos los cuadros por 1 segundo
+            #ticks_inicial = pygame.time.get_ticks()
+            #ticks_final = ticks_inicial + 2 * 1000
+            #while True:
+            #    ticks_inicial = pygame.time.get_ticks()
+            #    if ticks_inicial > ticks_final:
+            #        break
+            #    pygame.display.flip()
+            #pygame.draw.rect(self.ventana, self.negro, Rect(cord_x, cord_y, x, y))
+                    
+                         
+                      
+            #print(cuadros)
+            '''  ticks_inicial = pygame.time.get_ticks()
+            ticks_final = ticks_inicial + 2 * 1000
+            while True:
+                ticks_inicial = pygame.time.get_ticks()
+                self.ventana.blit(imagen, (720, 250))
+                if ticks_inicial > ticks_final:
+                    break
+                pygame.display.flip() '''
+            #self.ventana.blit(imagen, (720, 250))
+            #or i in range(0, 24):
+            #   ticks_inicial = pygame.time.get_ticks()
+            #   ticks_final = ticks_inicial + 1 * 1000
+            #   while True:
+            #       ticks_inicial = pygame.time.get_ticks()
+            #       if ticks_inicial > ticks_final:
+            #           break
+            #       pygame.display.flip()                
+            #   aleatorio = random.randint(0, len(cuadros) - 1)
+            #   cuadros.pop(aleatorio)
+            #   #print(cuadros)
         
         if efecto == 'AbajoArriba.py':
             cordYDown = 390
