@@ -1214,3 +1214,9 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+""" Cambiar en Resumen -> guardar_configuracion
+para guardar la imagen reescalada.
+
+img = img.resize((128,48))
+ """

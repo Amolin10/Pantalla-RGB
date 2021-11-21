@@ -45,17 +45,10 @@ class Visualizar:
         self.nomEfecto = fuente.render("Efecto: ", 0, (self.negro))
         self.nombre_efecto = fuente.render(presentacion_efecto, 0, (self.negro))
         self.tiempo = fuente.render("Tiempo: ", 0, (self.negro))
-        #nombre_tiempo = fuente.render(presentacion_tiempo, 0, (negro))
         self.seg = fuente.render(presentacion_tiempo, 0, (self.negro))
 
         self.play = Rect(635, 500, 70, 25)
-        #self.pausa = Rect(860, 380, 80, 25)
-        #self.stop = Rect(1060, 380, 80, 25)
         self.regresar = Rect(1085, 500, 70, 25)
-        #self.vel1 = Rect(635, 430, 130, 25)
-        #self.vel2 = Rect(835, 430, 130, 25)
-        #self.vel4 = Rect(1037, 430, 130, 25)
-
         self.fuente2 = pygame.font.SysFont("Calibri", 20)
         
 
@@ -116,23 +109,16 @@ class Visualizar:
         pygame.draw.line(self.ventana, self.negro, (0,120), (1200,120), 5)
         pygame.draw.line(self.ventana, self.negro, (600,120), (600,600), 5)
         pygame.draw.rect(self.ventana, self.silver, (720, 250, 360, 140))
-        #self.ventana.blitself.(pruebaR, (720, 200))
         self.ventana.blit(self.nom_Imagen, (50,150))
         self.ventana.blit(self.nombre_imagen, (280,150))
         self.ventana.blit(self.nomEfecto, (175,220))
         self.ventana.blit(self.nombre_efecto, (280, 220))
         self.ventana.blit(self.tiempo, (165,290))
-        #ventana.blit(nombself.re_tiempo, (280, 290))
         self.ventana.blit(self.seg, (280,290))                    
 
         self.crearBoton(self.ventana, self.play, "Play")
-        #self.crearBoton(self.ventana, self.pausa, "Pausa")
-        #self.crearBoton(self.ventana, self.stop, "Stop")
         self.crearBoton(self.ventana, self.regresar, "Salir")
-        #self.crearBoton(self.ventana, self.vel1, "Velocidad  x1")
-        #self.crearBoton(self.ventana, self.vel2, "Velocidad  x2")
-        #self.crearBoton(self.ventana, self.vel4, "Velocidad  x4")  
-        
+       
 
     def presentar_efecto(self):
         prueba = pygame.image.load(presentacion_imagen)
@@ -140,18 +126,7 @@ class Visualizar:
         imagen = pruebaR
         efecto = presentacion_efecto
         
-        if efecto == 'Aleatorio.py': #AbajoArriba  Instantaneo   ArribbaAbajo   DerechaIzquierda 
-            ''' efecto_aleatorio = random.randint(1, 4)
-            if(efecto_aleatorio == 1):
-                efecto = 'AbajoArriba.py'
-            elif(efecto_aleatorio == 2):
-                efecto = 'Instantaneo.py'
-            elif(efecto_aleatorio == 3):
-                efecto = 'ArribaAbajo.py'
-            elif(efecto_aleatorio == 4):
-                efecto = 'DerechaIzquierda.py'
-            print(efecto) '''
-            
+        if efecto == 'Aleatorio.py': #AbajoArriba  Instantaneo   ArribbaAbajo   DerechaIzquierda             
             # x = 60, 6 cuadros
             # y = 35, 4 cuadros
             cuadros_y = [0, 1, 2, 3]
@@ -169,16 +144,6 @@ class Visualizar:
                         break 
                 cuadros_utilizados.append([aleatorio_y, aleatorio_x])
                 
-                
-            
-            # Meter 6 * 4 cuadros en un arreglo
-            #for i in range(0, 24):
-            #    self.ventana.blit(imagen, (720, 250))
-            #    aleatorio_y = random.randint(0, len(cuadros_y) - 1)
-            #    cuadros_y.pop(aleatorio_y)
-            #    aleatorio_x = random.randint(0, len(cuadros_x) - 1)
-            #    cuadros_x.pop(aleatorio_x)
-                ''' not (j == aleatorio_y and i == aleatorio_x) and '''
                 for i in range(0, 4):
                     cord_y = 250 + y * i
                     for j in range(0, 6):
@@ -193,41 +158,7 @@ class Visualizar:
                     if ticks_inicial > ticks_final:
                         break
                     pygame.display.flip()
-                    
-            # Mostrar todos los cuadros por 1 segundo
-            #ticks_inicial = pygame.time.get_ticks()
-            #ticks_final = ticks_inicial + 2 * 1000
-            #while True:
-            #    ticks_inicial = pygame.time.get_ticks()
-            #    if ticks_inicial > ticks_final:
-            #        break
-            #    pygame.display.flip()
-            #pygame.draw.rect(self.ventana, self.negro, Rect(cord_x, cord_y, x, y))
-                    
-                         
-                      
-            #print(cuadros)
-            '''  ticks_inicial = pygame.time.get_ticks()
-            ticks_final = ticks_inicial + 2 * 1000
-            while True:
-                ticks_inicial = pygame.time.get_ticks()
-                self.ventana.blit(imagen, (720, 250))
-                if ticks_inicial > ticks_final:
-                    break
-                pygame.display.flip() '''
-            #self.ventana.blit(imagen, (720, 250))
-            #or i in range(0, 24):
-            #   ticks_inicial = pygame.time.get_ticks()
-            #   ticks_final = ticks_inicial + 1 * 1000
-            #   while True:
-            #       ticks_inicial = pygame.time.get_ticks()
-            #       if ticks_inicial > ticks_final:
-            #           break
-            #       pygame.display.flip()                
-            #   aleatorio = random.randint(0, len(cuadros) - 1)
-            #   cuadros.pop(aleatorio)
-            #   #print(cuadros)
-        
+
         if efecto == 'AbajoArriba.py':
             cordYDown = 390
             velY = 2
@@ -283,6 +214,5 @@ class Visualizar:
                    
         print(presentacion_efecto)
 
-    
 ver = Visualizar()
 ver.mostrar()
