@@ -126,13 +126,14 @@ class Visualizar:
         imagen = pruebaR
         efecto = presentacion_efecto
         
-        if efecto == 'Aleatorio.py': #AbajoArriba  Instantaneo   ArribbaAbajo   DerechaIzquierda             
-            # x = 60, 6 cuadros
-            # y = 35, 4 cuadros
-            cuadros_y = [0, 1, 2, 3]
-            cuadros_x = [0, 1, 2, 3, 4, 5]
-            x = 60
-            y = 35 
+        if efecto == 'Aleatorio.py': #AbajoArriba  Instantaneo   ArribbaAbajo   DerechaIzquierda                        
+            # y = 10, 14 cuadros
+            # x = 15, 24 cuadros
+            # tiempo = 0.01
+            cuadros_y = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+            cuadros_x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+            y = 10 
+            x = 15
             
             cuadros_utilizados = []
             for i in range(0, len(cuadros_y)*len(cuadros_x)):
@@ -144,15 +145,15 @@ class Visualizar:
                         break 
                 cuadros_utilizados.append([aleatorio_y, aleatorio_x])
                 
-                for i in range(0, 4):
+                for i in range(0, len(cuadros_y)):
                     cord_y = 250 + y * i
-                    for j in range(0, 6):
+                    for j in range(0, len(cuadros_x)):
                         cord_x = 720 + x * j 
                         if not ([i, j] in cuadros_utilizados):
                             pygame.draw.rect(self.ventana, self.negro, Rect(cord_x, cord_y, x, y))
                             
                 ticks_inicial = pygame.time.get_ticks()
-                ticks_final = ticks_inicial + 0.2 * 1000
+                ticks_final = ticks_inicial + 0.01 * 1000
                 while True:
                     ticks_inicial = pygame.time.get_ticks()
                     if ticks_inicial > ticks_final:
