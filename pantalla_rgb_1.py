@@ -777,7 +777,7 @@ class Resumen:
             nombre_imagen = self.imagen_nombre(imagen_ruta)
             
             img = Image.open(imagen_ruta)
-            img.resize((128,48))
+            img = img.resize((128,48))
             img.save(f'{ruta_guardar}/Imagenes/{nombre_imagen}.ppm')
             
             print(type(str(indice)), type(str(tiempo)))
@@ -1214,9 +1214,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-""" Cambiar en Resumen -> guardar_configuracion
-para guardar la imagen reescalada.
-
-img = img.resize((128,48))
- """
