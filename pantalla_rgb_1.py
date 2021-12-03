@@ -13,6 +13,9 @@ from pygame import *
 import sys, pygame
 from pygame.draw import line
 from pygame.font import SysFont
+from pygame import * 
+import time
+import random
 
 ############################ Datos #########################################
 class Datos:
@@ -253,14 +256,18 @@ class Opciones:
             lineas_archivo[i] = lineas_archivo[i][:-1]
         #print(len(lineas_archivo), lineas_archivo)
        
+        numero_datos = 0
         for i in range(0, len(lineas_archivo), 4):
-            indice = lineas_archivo[i][5:]
+            #indice = lineas_archivo[i][5:]
+            indice = numero_datos
             efecto = lineas_archivo[i+1]
             imagen = ruta_configuracion + '/Imagenes/' + lineas_archivo[i+2]
             tiempo = lineas_archivo[i+3]
             
             datos_temp = Datos(indice, imagen, efecto, tiempo)
             lista_configuracion.append(datos_temp)
+            
+            numero_datos += 1
             
         print(lista_configuracion)
             
@@ -392,14 +399,14 @@ class Configuracion:
         #self.minutos.set('0')
         
         Label(tiempo, text="minutos:", font=("verdana", 14), background=self.colorFondo).grid(column=0, row=1, sticky="we")
-        minutosBox = ttk.Spinbox(tiempo, from_=0, to=4, increment=1, state="readonly", width=4, font=("verdana", 14), textvariable=self.minutos)
+        minutosBox = ttk.Spinbox(tiempo, from_=0, to=4, increment=1, width=4, font=("verdana", 14), textvariable=self.minutos)
         minutosBox.grid(column=0, row=2, sticky='n', pady=5)
         
         self.segundos = StringVar()
         #self.segundos.set('0')
         
         Label(tiempo, text="segundos:", font=("verdana", 14), background=self.colorFondo).grid(column=1, row=1, sticky="we")
-        segundosBox = ttk.Spinbox(tiempo, from_=0, to=59, increment=1, state="readonly", width=4, font=("verdana", 14), textvariable=self.segundos)
+        segundosBox = ttk.Spinbox(tiempo, from_=0, to=59, increment=1, width=4, font=("verdana", 14), textvariable=self.segundos)
         segundosBox.grid(column=1, row=2, sticky='n', pady=5)
         # Label(tiempo, text="", background="white").grid(column=0, row=3, columnspan=3)
         tiempo.grid(row=8, column=3, columnspan=2, rowspan=2, sticky="ns")
@@ -488,6 +495,10 @@ class Configuracion:
     def agregar(self):
         if (self.imagen_ruta == '' or self.opcion_efecto.get() == 'None' or self.minutos.get() == '' or self.segundos.get() == ''):
             messagebox.showwarning("Pantalla RGB", "Debe llenar todos los campos.")
+        elif (int(self.minutos.get()) > 4):
+                messagebox.showwarning("Pantalla RGB", "El valor de los minutos debe ser menor a 5.")
+        elif (int(self.segundos.get()) > 59):
+                messagebox.showwarning("Pantalla RGB", "El valor de los segundos debe ser menor a 60.")
         else:
             tiempo = (int(self.minutos.get()) * 60) + int(self.segundos.get())
             print(f'Imagen: {self.imagen_ruta}\n Efecto: {self.opcion_efecto.get()}\n Tiempo: {tiempo}')
@@ -534,9 +545,18 @@ class Configuracion:
 
 
     def visualizar(self):
-        visualizar = Visualizar()
-        visualizar.mostrar()  # Pantalla de visualizar
-        pass
+        if (self.imagen_ruta == '' or self.opcion_efecto.get() == 'None' or self.minutos.get() == '' or self.segundos.get() == ''):
+            messagebox.showwarning("Pantalla RGB", "Debe llenar todos los campos.")
+        elif (int(self.minutos.get()) > 4):
+                messagebox.showwarning("Pantalla RGB", "El valor de los minutos debe ser menor a 5.")
+        elif (int(self.segundos.get()) > 59):
+                messagebox.showwarning("Pantalla RGB", "El valor de los segundos debe ser menor a 60.")
+        else:
+            tiempo = (int(self.minutos.get()) * 60) + int(self.segundos.get())
+            print(f'Imagen: {self.imagen_ruta}\n Efecto: {self.opcion_efecto.get()}\n Tiempo: {tiempo}')
+            datos = Datos(len(lista_configuracion)+1, self.imagen_ruta, self.opcion_efecto.get(), tiempo)
+            visualizar = Visualizar(datos)
+            visualizar.mostrar()
 
     def terminar(self):
         if len(lista_configuracion) == 0:
@@ -770,7 +790,7 @@ class Resumen:
         
         for i in lista_configuracion:
             indice = int(i.get_numero()) + 1
-            imagen_ruta =i.get_imagen()
+            imagen_ruta = i.get_imagen()
             efecto = i.get_efecto()
             tiempo = i.get_tiempo()
             
@@ -938,14 +958,14 @@ class ConfiguracionResumen:
         #self.minutos.set('0')
         
         Label(tiempo, text="minutos:", font=("verdana", 14), background=self.colorFondo).grid(column=0, row=1, sticky="we")
-        minutosBox = ttk.Spinbox(tiempo, from_=0, to=4, increment=1, state="readonly", width=4, font=("verdana", 14), textvariable=self.minutos)
+        minutosBox = ttk.Spinbox(tiempo, from_=0, to=4, increment=1, width=4, font=("verdana", 14), textvariable=self.minutos)
         minutosBox.grid(column=0, row=2, sticky='n', pady=5)
         
         self.segundos = StringVar()
         #self.segundos.set('0')
         
         Label(tiempo, text="segundos:", font=("verdana", 14), background=self.colorFondo).grid(column=1, row=1, sticky="we")
-        segundosBox = ttk.Spinbox(tiempo, from_=0, to=59, increment=1, state="readonly", width=4, font=("verdana", 14), textvariable=self.segundos)
+        segundosBox = ttk.Spinbox(tiempo, from_=0, to=59, increment=1, width=4, font=("verdana", 14), textvariable=self.segundos)
         segundosBox.grid(column=1, row=2, sticky='n', pady=5)
         # Label(tiempo, text="", background="white").grid(column=0, row=3, columnspan=3)
         tiempo.grid(row=8, column=3, columnspan=2, rowspan=2, sticky="ns")
@@ -1034,17 +1054,26 @@ class ConfiguracionResumen:
         self.root.mainloop()
 
     def guardar_cambios(self):
-        numero_imagen = self.numero_imagen_editar
-        tiempo = (int(self.minutos.get()) * 60) + int(self.segundos.get())
-        lista_configuracion[numero_imagen].set_imagen(self.imagen_ruta)
-        lista_configuracion[numero_imagen].set_efecto(self.opcion_efecto.get())
-        lista_configuracion[numero_imagen].set_tiempo(tiempo)
+        if (self.imagen_ruta == '' or self.opcion_efecto.get() == 'None' or self.minutos.get() == '' or self.segundos.get() == ''):
+            messagebox.showwarning("Pantalla RGB", "Debe llenar todos los campos.")
+        elif (int(self.minutos.get()) > 4):
+                messagebox.showwarning("Pantalla RGB", "El valor de los minutos debe ser menor a 5.")
+        elif (int(self.segundos.get()) > 59):
+                messagebox.showwarning("Pantalla RGB", "El valor de los segundos debe ser menor a 60.")
+        else:
+            numero_imagen = self.numero_imagen_editar
+            tiempo = (int(self.minutos.get()) * 60) + int(self.segundos.get())
+            lista_configuracion[numero_imagen].set_numero(self.numero_imagen_editar)
+            lista_configuracion[numero_imagen].set_imagen(self.imagen_ruta)
+            lista_configuracion[numero_imagen].set_efecto(self.opcion_efecto.get())
+            lista_configuracion[numero_imagen].set_tiempo(tiempo)
+            messagebox.showinfo("Pantalla RGB", "Se han guardado los cambios con éxito")
         
         #print(f'Imagen: {self.imagen_ruta}\n Efecto: {self.opcion_efecto}\n Tiempo: {tiempo}')
         #lista_configuracion.append(datos)
         #print(lista_configuracion)
         #self.limpiar_configuracion()
-        messagebox.showinfo("Pantalla RGB", "Se han guardado los cambios con éxito")
+        
         
     def set_imagen(self, archivo):
         #archivo = filedialog.askopenfilename(filetypes=[('Archivos de imagen', '*.jpg *.png *.jpeg *.ppm')])
@@ -1077,11 +1106,19 @@ class ConfiguracionResumen:
         self.minutos.set(minutos)
         self.segundos.set(segundos)
 
-
     def visualizar(self):
-        visualizar = Visualizar()
-        visualizar.mostrar()  # Pantalla de visualizar
-        pass
+        if (self.imagen_ruta == '' or self.opcion_efecto.get() == 'None' or self.minutos.get() == '' or self.segundos.get() == ''):
+            messagebox.showwarning("Pantalla RGB", "Debe llenar todos los campos.")
+        elif (int(self.minutos.get()) > 4):
+                messagebox.showwarning("Pantalla RGB", "El valor de los minutos debe ser menor a 5.")
+        elif (int(self.segundos.get()) > 59):
+                messagebox.showwarning("Pantalla RGB", "El valor de los segundos debe ser menor a 60.")
+        else:
+            tiempo = (int(self.minutos.get()) * 60) + int(self.segundos.get())
+            print(f'Imagen: {self.imagen_ruta}\n Efecto: {self.opcion_efecto.get()}\n Tiempo: {tiempo}')
+            datos = Datos(len(lista_configuracion), self.imagen_ruta, self.opcion_efecto.get(), tiempo)
+            visualizar = Visualizar(datos)
+            visualizar.mostrar()
 
     def terminar(self):
         self.destruir()
@@ -1108,100 +1145,219 @@ class ConfiguracionResumen:
 
 
 ########################Visualizar#################################
-class Visualizar:    
-    def mostrar(self): 
+class Visualizar:
+    
+    def __init__(self, datos):
         pygame.init()
-
-        size = (1200, 560)
-
-        ventana = pygame.display.set_mode(size)
-
-        blanco = (255,255,255)
-        silver = (192,192,192)
-        negro = (0,0,0)
-        gray = (128,128,128)
-        lightblue = (173,216,230)
-
-        #Imagen de ventana y título
+        
+        self.presentacion_nombre = str(datos.get_numero())
+        self.presentacion_imagen = datos.get_imagen()
+        self.presentacion_efecto = datos.get_efecto()
+        self.presentacion_tiempo = str(datos.get_tiempo())
+        
+        self.size = (1200, 560)
+        self.ventana = pygame.display.set_mode(self.size)
         pygame.display.set_caption("Visualizar")
         icono = pygame.image.load("./recursos/firefly.png")
         pygame.display.set_icon(icono)
-
+        
+        self.cargar_elementos()        
+        
+    def cargar_elementos(self):
+        self.blanco = (255,255,255)
+        self.silver = (192,192,192)
+        self.negro = (0,0,0)
+        self.gray = (128,128,128)
+        self.lightblue = (173,216,230)
 
         uam = pygame.image.load("./recursos/uamazcL.png")
-        uamAzc = pygame.transform.scale(uam, (300, 80))
+        self.uamAzc = pygame.transform.scale(uam, (300, 80))
         cbi = pygame.image.load("./recursos/cbi.png")
-        cbiAzc = pygame.transform.scale(cbi, (300, 80))
+        self.cbiAzc = pygame.transform.scale(cbi, (300, 80))
 
-        prueba = pygame.image.load("./recursos/RGB.jpg")
-        pruebaR = pygame.transform.scale(prueba, (360, 140))
+        prueba = pygame.image.load(self.presentacion_imagen)
+        self.pruebaR = pygame.transform.scale(prueba, (360, 140))
 
         miFuente = pygame.font.SysFont("Verdana", 30)
-        text = miFuente.render("Visualización de animación", 0, (negro))
+        self.text = miFuente.render("Visualización de animación", 0, (self.negro))
         fuente = pygame.font.SysFont("Verdana", 20)
-        nomImagen = fuente.render("Nombre de imagen: ", 0, (negro))
-        nomEfecto = fuente.render("Efecto: ", 0, (negro))
-        tiempo = fuente.render("Tiempo: ", 0, (negro))
-        seg = fuente.render("segundos.", 0, (negro))
+        self.nom_Imagen = fuente.render("Número de imagen: ", 0, (self.negro))
+        self.nombre_imagen = fuente.render(self.presentacion_nombre, 0, (self.negro))
+        self.nomEfecto = fuente.render("Efecto: ", 0, (self.negro))
+        self.nombre_efecto = fuente.render(self.presentacion_efecto, 0, (self.negro))
+        self.tiempo = fuente.render("Tiempo: ", 0, (self.negro))
+        self.seg = fuente.render(self.presentacion_tiempo, 0, (self.negro))
 
-        play = Rect(660, 380, 80, 25)
-        pause = Rect(860, 380, 80, 25)
-        stop = Rect(1060, 380, 80, 25)
-        regresar = Rect(1060, 500, 80, 25)
-        vel1 = Rect(635, 430, 130, 25)
-        vel2 = Rect(835, 430, 130, 25)
-        vel4 = Rect(1037, 430, 130, 25)
+        self.play = Rect(635, 500, 70, 25)
+        self.regresar = Rect(1085, 500, 70, 25)
+        self.fuente2 = pygame.font.SysFont("Calibri", 20)
+        
 
-        fuente2 = pygame.font.SysFont("Calibri", 20)
+    def crearBoton(self, screen, boton, mensaje):
+        if boton.collidepoint(pygame.mouse.get_pos()):
+            pygame.draw.rect(self.ventana, self.silver, boton)
+        else:
+            pygame.draw.rect(self.ventana, self.gray, boton)
+        texto = self.fuente2.render(mensaje, True, (self.blanco))
+        screen.blit(texto, (boton.x+(boton.width-texto.get_width())/2,
+        boton.y+(boton.height-texto.get_height())/2)
+        )
 
-        def crearBoton(screen, boton, mensaje):
-            if boton.collidepoint(pygame.mouse.get_pos()):
-                pygame.draw.rect(ventana, silver, boton)
-            else:
-                pygame.draw.rect(ventana, gray, boton)
-            texto = fuente2.render(mensaje, True, (blanco))
-            screen.blit(texto, (boton.x+(boton.width-texto.get_width())/2,
-            boton.y+(boton.height-texto.get_height())/2)
-            )
 
-        clock = pygame.time.Clock()
-        FPS = 17
+    def mostrar(self): 
+
+        self.clock = pygame.time.Clock()
+        self.FPS = 20
+
+        coordenada_x_inicial = -250
+        coordenada_y_inicial = -250
+
 
         while True:
+           
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-            ventana.fill(blanco)    #Color de fondo
-            ventana.blit(uamAzc, (50, 20))
-            ventana.blit(text, (400,40))
-            ventana.blit(cbiAzc, (850, 20))
-            pygame.draw.line(ventana, negro, (0,120), (1200,120), 5)
-            pygame.draw.line(ventana, negro, (600,120), (600,600), 5)
-            pygame.draw.rect(ventana, silver, (720, 200, 360, 140))
-            ventana.blit(pruebaR, (720, 200))
-            ventana.blit(nomImagen, (50,150))
-            ventana.blit(nomEfecto, (50,220))
-            ventana.blit(tiempo, (50,290))
-            ventana.blit(seg, (230,290))
 
+            self.mostrar_ventana()
+            
             if event.type == MOUSEBUTTONDOWN:
-                if regresar.collidepoint(pygame.mouse.get_pos()):
+                if self.regresar.collidepoint(pygame.mouse.get_pos()):
                     self.salir()
-                    pass
 
-            crearBoton(ventana, play, "Play")
-            crearBoton(ventana, pause, "Pause")
-            crearBoton(ventana, stop, "Stop")
-            crearBoton(ventana, regresar, "Salir")
-            crearBoton(ventana, vel1, "Velocidad  x1")
-            crearBoton(ventana, vel2, "Velocidad  x2")
-            crearBoton(ventana, vel4, "Velocidad  x4")
+            if event.type == MOUSEBUTTONDOWN and event.button == 1:     #Eventos que suceden con el mouse
+                if self.play.collidepoint(pygame.mouse.get_pos()): #and cordXIzq >= 125 and cordXDer <= 615:
+                    self.presentar_efecto()        #Acción a realizar cuando se presiona le boton 
+                    coordenada_x_inicial = 720
+                    coordenada_y_inicial = 250
+                
+            self.ventana.blit(self.pruebaR, (coordenada_x_inicial, coordenada_y_inicial))
+
 
             pygame.display.flip()
-            clock.tick(FPS)
+            self.clock.tick(self.FPS)
             
+
     def salir(self):
         pygame.quit()
+
+        
+    def mostrar_ventana(self):
+        self.ventana.fill(self.blanco)    #Color de fondo
+        self.ventana.blit(self.uamAzc, (50, 20))
+        self.ventana.blit(self.text, (400,40))
+        self.ventana.blit(self.cbiAzc, (850, 20))
+        pygame.draw.line(self.ventana, self.negro, (0,120), (1200,120), 5)
+        pygame.draw.line(self.ventana, self.negro, (600,120), (600,600), 5)
+        pygame.draw.rect(self.ventana, self.silver, (720, 250, 360, 140))
+        self.ventana.blit(self.nom_Imagen, (50,150))
+        self.ventana.blit(self.nombre_imagen, (280,150))
+        self.ventana.blit(self.nomEfecto, (175,220))
+        self.ventana.blit(self.nombre_efecto, (280, 220))
+        self.ventana.blit(self.tiempo, (165,290))
+        self.ventana.blit(self.seg, (280,290))                    
+
+        self.crearBoton(self.ventana, self.play, "Play")
+        self.crearBoton(self.ventana, self.regresar, "Salir")
+       
+
+    def presentar_efecto(self):
+        prueba = pygame.image.load(self.presentacion_imagen)
+        pruebaR = pygame.transform.scale(prueba, (360, 140))
+        imagen = pruebaR
+        efecto = self.presentacion_efecto
+        
+        if efecto == 'Aleatorio.py': #AbajoArriba  Instantaneo   ArribbaAbajo   DerechaIzquierda                        
+            # y = 10, 14 cuadros
+            # x = 15, 24 cuadros
+            # tiempo = 0.01
+            cuadros_y = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+            cuadros_x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+            y = 10 
+            x = 15
+            
+            cuadros_utilizados = []
+            for i in range(0, len(cuadros_y)*len(cuadros_x)):
+                self.ventana.blit(imagen, (720, 250))
+                while True:
+                    aleatorio_y = random.randint(0, len(cuadros_y) - 1)
+                    aleatorio_x = random.randint(0, len(cuadros_x) - 1)
+                    if not [aleatorio_y, aleatorio_x] in cuadros_utilizados:
+                        break 
+                cuadros_utilizados.append([aleatorio_y, aleatorio_x])
+                
+                for i in range(0, len(cuadros_y)):
+                    cord_y = 250 + y * i
+                    for j in range(0, len(cuadros_x)):
+                        cord_x = 720 + x * j 
+                        if not ([i, j] in cuadros_utilizados):
+                            pygame.draw.rect(self.ventana, self.negro, Rect(cord_x, cord_y, x, y))
+                            
+                ticks_inicial = pygame.time.get_ticks()
+                ticks_final = ticks_inicial + 0.01 * 1000
+                while True:
+                    ticks_inicial = pygame.time.get_ticks()
+                    if ticks_inicial > ticks_final:
+                        break
+                    pygame.display.flip()
+
+        if efecto == 'AbajoArriba.py':
+            cordYDown = 390
+            velY = 2
+            efecto_DtU = True
+            while efecto_DtU:
+                cordYDown -= velY
+                self.ventana.blit(imagen, (720, cordYDown))
+                cuadro = Rect(720, 390, 360, 140)
+                pygame.draw.rect(self.ventana, self.blanco, cuadro)
+                if cordYDown <= 250:
+                    efecto_DtU = False
+                pygame.display.flip()
+                self.clock.tick(self.FPS)
+            
+        elif efecto == 'Instantaneo.py':
+            ticks_inicial = pygame.time.get_ticks()
+            ticks_final = ticks_inicial + 2 * 1000
+            while True:
+                ticks_inicial = pygame.time.get_ticks()
+                self.ventana.blit(imagen, (720, 250))
+                if ticks_inicial > ticks_final:
+                    break
+                pygame.display.flip()
+            
+        elif efecto == 'ArribaAbajo.py':
+            cordYUp = 110
+            velY = 2
+            efecto_UtD = True
+            while efecto_UtD:
+                cordYUp += velY
+                self.ventana.blit(imagen, (720, cordYUp))
+                cuadro = Rect(720, 110, 360, 140)
+                pygame.draw.rect(self.ventana, self.blanco, cuadro)
+                pygame.draw.line(self.ventana, self.negro, (0,120), (1200,120), 5)
+                if cordYUp >= 250:
+                    efecto_UtD = False
+                pygame.display.flip()
+                self.clock.tick(self.FPS)
+        
+        elif efecto == 'DerechaIzquierda.py':
+            cordXDer = 1080
+            velX = 4
+            efecto_DI = True
+            while efecto_DI:
+                cordXDer -= velX
+                self.ventana.blit(imagen, (cordXDer, 250))
+                cuadro = Rect(1080, 250, 120, 140)
+                pygame.draw.rect(self.ventana, self.blanco, cuadro)
+                if cordXDer <= 720:
+                    efecto_DI = False
+                pygame.display.flip()
+                self.clock.tick(self.FPS)
+                   
+        print(self.presentacion_efecto)
+
+#ver = Visualizar()
+#ver.mostrar()
 ########################Termina Visualizar#################################
 
 
@@ -1214,3 +1370,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

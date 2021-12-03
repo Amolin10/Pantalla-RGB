@@ -1,7 +1,7 @@
 Datos1
-DerechaIzquierda.py
-computadora.ppm
-183
+Aleatorio.py
+micro.ppm
+255
 Datos2
 DerechaIzquierda.py
 micro.ppm

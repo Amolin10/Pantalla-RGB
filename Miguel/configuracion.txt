@@ -1,0 +1,16 @@
+Datos1
+Aleatorio.py
+micro.ppm
+299
+Datos2
+Instantaneo.py
+electronica.ppm
+125
+Datos3
+DerechaIzquierda.py
+computadora.ppm
+200
+Datos4
+ArribaAbajo.py
+RGB.ppm
+278
