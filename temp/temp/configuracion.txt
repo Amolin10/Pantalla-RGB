@@ -1,4 +1,0 @@
-Datos1
-Aleatorio.py
-RGB.ppm
-70

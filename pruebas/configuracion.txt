@@ -1,4 +1,0 @@
-Datos1
-Aleatorio.py
-bienvenida.ppm
-70
