@@ -915,6 +915,7 @@ class Resumen:
         if self.ruta_guardar == '':
             self.guardar_configuracion()
         else:
+            #Se eliminan los últimos 13 caracteres de la ruta donde se encuentra la carpeta "Configuracion" para obtener la ruta una carpeta antes.
             #La variable dir_zip indica el directorio de un archivo comprimido (.zip)
             #En este archivo se almacenará el archivo 'configuración.txt' y la carpeta con las imágenes necesarias
             dir_zip = self.ruta_guardar[:-13] + './config.zip'
@@ -1466,10 +1467,10 @@ class Visualizar:
         #Ciclo para mostrar constantemente el contenido de la ventana
         while True:
            #Cuando se desea cerrar la ventana, se termina el proceso 'pygame'  
+            self.mostrar_ventana()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-            self.mostrar_ventana()
             
             #Cuando se oprime el botón de salir, se termina el proceso 'pygame'
             if event.type == MOUSEBUTTONDOWN:
@@ -1479,7 +1480,7 @@ class Visualizar:
             #Cuando se selecciona el botón 'Play', se ejecuta la función para desplegar la animación
             if event.type == MOUSEBUTTONDOWN and event.button == 1:     
                 if self.play.collidepoint(pygame.mouse.get_pos()): 
-                    self.presentar_efecto()     
+                    self.presentar_efecto()   
                     coordenada_x_inicial = 720
                     coordenada_y_inicial = 250
             
@@ -1530,7 +1531,7 @@ class Visualizar:
 
     #Función para desplegar una imagen en la pantalla, utilizando alguno de los efectos disponibles
     def presentar_efecto(self):
-        #Cargar imaagen 
+        #Cargar imagen 
         prueba = pygame.image.load(self.presentacion_imagen)
         #Se redimensiona la imagen a 360x140 pixeles para mostrarla en la ventana 
         pruebaR = pygame.transform.scale(prueba, (360, 140))
@@ -1549,8 +1550,8 @@ class Visualizar:
             
             #La variable 'cuadros utilizados' almacena las coordenadas de los cuadros que se han eliminado para descubrir una parte de la imagen
             cuadros_utilizados = []
-            #Colocar la imagen al fondo
             for i in range(0, len(cuadros_y)*len(cuadros_x)):
+                #Colocar la imagen al fondo
                 self.ventana.blit(imagen, (720, 250))
                 while True:
                     #Obtener dos números aleatorios, que se usan como coordenadas de una cuadricula
@@ -1920,7 +1921,7 @@ class VisualizarResumen:
             velY = 2
             #Condición de paro
             efecto_DtU = True
-            #Desplaza la imagen hacia abajo hasta que llega a la posición final (coordenada 250 en Y)
+            #Desplaza la imagen hacia abajo hasta que llega a la posición final (coorden ada 250 en Y)
             while efecto_DtU:
                 cordYDown -= velY
                 #Muestra la imagen
