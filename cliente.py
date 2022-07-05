@@ -147,7 +147,7 @@ class Bienvenida:
         imgAyuda = Image.open("./iconos/signo-de-interrogacion.png")
         imgAyuda = imgAyuda.resize((20, 20))
         imgAyuda = ImageTk.PhotoImage(imgAyuda)
-        botonAyuda = Button(fondo, image=imgAyuda, text="Ayuda  ", compound="right", command=""" ventanaAyuda """)
+        botonAyuda = Button(fondo, image=imgAyuda, text="Ayuda  ", compound="right", command=self.mostrarAyuda)
         botonAyuda.grid(row=4, column=0, ipadx=10)
         botonAyuda.image = imgAyuda
 
@@ -181,6 +181,11 @@ class Bienvenida:
         opciones = Opciones()
         opciones.cargar()
         opciones.mostrar()
+
+    #Función para mostrar el PDF de Ayuda
+    def mostrarAyuda(self):
+        file = ".\Ayuda\manual_de_uso.pdf"
+        os.system(file)
 #######################Termina Bienvenida################################
 
 
@@ -784,7 +789,7 @@ class Resumen:
         imgSave=Image.open("./iconos/upload.png")
         imgSave = imgSave.resize((30, 30))
         imgSave = ImageTk.PhotoImage(imgSave)
-        botonSave = Button(self.root, image=imgSave, text="Envíar configuración   ", compound="right", font=("Verdana", 12), activebackground="#999999", command=self.enviar_configuracion)
+        botonSave = Button(self.root, image=imgSave, text="Enviar configuración   ", compound="right", font=("Verdana", 12), activebackground="#999999", command=self.enviar_configuracion)
         botonSave.grid(row=9, column=3, ipadx=15, padx=10, pady=15, sticky="es")
         botonSave.image = imgSave
 
